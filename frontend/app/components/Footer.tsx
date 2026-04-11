@@ -1,5 +1,7 @@
 import Link from 'next/link'
 
+const link = 'hover:underline underline-offset-4'
+
 export default function Footer() {
   return (
     <footer className="bg-gray-50 relative border-t border-gray-100">
@@ -14,17 +16,26 @@ export default function Footer() {
               Social dance weekends and events in the Isle of Man — Modern Jive, Tango and more.
             </p>
           </div>
-          <nav className="flex flex-wrap gap-x-6 gap-y-2 justify-center font-mono text-sm text-gray-700">
-            <Link href="/posts" className="hover:underline underline-offset-4">
-              Events
+          <nav
+            aria-label="Footer"
+            className="flex flex-wrap gap-x-6 gap-y-2 justify-center font-mono text-sm text-gray-700"
+          >
+            <Link href="/" className={link}>
+              Home
             </Link>
-            <Link href="/travel" className="hover:underline underline-offset-4">
-              Travel
-            </Link>
-            <Link href="/about" className="hover:underline underline-offset-4">
+            <Link href="/about" className={link}>
               About
             </Link>
-            <Link href="/contact" className="hover:underline underline-offset-4">
+            <Link href="/events" className={link}>
+              Events
+            </Link>
+            <Link href="/travel" className={link}>
+              Travel
+            </Link>
+            <Link href="/accommodation" className={link}>
+              Accommodation
+            </Link>
+            <Link href="/contact" className={link}>
               Contact
             </Link>
           </nav>

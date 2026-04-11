@@ -16,7 +16,7 @@ export default function Page() {
               together local dancers and visitors from across the UK and Ireland.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch sm:items-center pt-2">
-              <CtaLink href="/posts">View Events</CtaLink>
+              <CtaLink href="/events">View Events</CtaLink>
               <CtaLink href="/travel" variant="secondary">
                 Travel Information
               </CtaLink>
