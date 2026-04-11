@@ -15,22 +15,22 @@ export default function TravelPage() {
       title="Travel"
       description="Ferries, flights, local transport and practical tips for visiting the Isle of Man for dance weekends."
     >
-      <div className="prose prose-gray max-w-none mb-10">
-        <p className="text-gray-600 font-light leading-relaxed">
-          Detailed travel advice, ferry options, and local tips will appear here. For now, see the
-          overview on the{' '}
-          <Link href="/" className="text-brand underline hover:text-brand-deep underline-offset-4">
-            home page
-          </Link>
-          .
-        </p>
+      <p>
+        Detailed travel advice, ferry options, and local tips will appear here. For now, see the
+        overview on the{' '}
+        <Link href="/" className="text-brand font-medium hover:text-brand-deep">
+          home page
+        </Link>
+        .
+      </p>
+      <div className="not-prose mt-10">
+        <Link
+          href="/"
+          className="inline-flex font-mono text-sm text-ink-muted hover:text-brand transition-colors underline-offset-4 hover:underline"
+        >
+          ← Back to home
+        </Link>
       </div>
-      <Link
-        href="/"
-        className="inline-flex font-mono text-sm text-gray-700 hover:underline underline-offset-4"
-      >
-        ← Back to home
-      </Link>
     </PageLayout>
   )
 }

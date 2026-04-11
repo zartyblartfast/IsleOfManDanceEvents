@@ -13,12 +13,10 @@ export default function AboutPage() {
       title="About IoM Dance"
       description="Placeholder copy will be replaced with your story, organisers, and how we run events."
     >
-      <div className="prose prose-gray max-w-none">
-        <p className="text-gray-600 font-light leading-relaxed">
-          This page will introduce the project, who is involved, and what dancers can expect from
-          weekends and socials in the Isle of Man.
-        </p>
-      </div>
+      <p>
+        This page will introduce the project, who is involved, and what dancers can expect from
+        weekends and socials in the Isle of Man.
+      </p>
     </PageLayout>
   )
 }

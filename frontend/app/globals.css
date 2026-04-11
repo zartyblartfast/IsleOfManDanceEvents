@@ -1,6 +1,52 @@
 @import 'tailwindcss';
 
-@plugin "@tailwindcss/typography';
+@plugin "@tailwindcss/typography";
+
+/* Theme tokens must come before @layer base uses them in @apply */
+@theme {
+  --shadow-layer: 0 35px 60px -15px rgba(26, 34, 52, 0.18);
+  --shadow-card: 0 4px 24px -4px rgba(26, 34, 52, 0.08), 0 12px 32px -8px rgba(26, 34, 52, 0.06);
+
+  --color-ink: #1a2234;
+  --color-ink-muted: #3d4a62;
+  --color-cream: #f8f6f1;
+  --color-cream-dark: #efe9df;
+  --color-white: #ffffff;
+
+  --color-brand: #1a6b6b;
+  --color-brand-deep: #145856;
+  --color-brand-muted: #4a9e99;
+  --color-brand-subtle: rgba(26, 107, 107, 0.08);
+
+  --color-accent: #c9a86c;
+  --color-accent-soft: rgba(201, 168, 108, 0.25);
+
+  --color-framework: var(--color-ink);
+  --color-black: var(--color-ink);
+  --color-blue: var(--color-brand-deep);
+  --color-yellow: var(--color-accent);
+
+  --color-gray-50: #f6f6f8;
+  --color-gray-100: #eeeef1;
+  --color-gray-200: #e3e4e8;
+  --color-gray-300: #bbbdc9;
+  --color-gray-400: #9499ad;
+  --color-gray-500: #727892;
+  --color-gray-600: #515870;
+  --color-gray-700: #383d51;
+  --color-gray-800: #252837;
+  --color-gray-900: #1b1d27;
+  --color-gray-950: #13141b;
+
+  --default-transition-duration: 250ms;
+}
+
+@utility container {
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
   html {
@@ -25,55 +71,6 @@
   }
 }
 
-@utility container {
-  margin: 0 auto;
-  padding: 0 2rem;
-}
-
-@custom-variant dark (&:where(.dark, .dark *));
-
-/* IoM Dance — coastal evening + warm dance-floor accent (no photos required) */
-@theme {
-  --shadow-layer: 0 35px 60px -15px rgba(26, 34, 52, 0.18);
-  --shadow-card: 0 4px 24px -4px rgba(26, 34, 52, 0.08), 0 12px 32px -8px rgba(26, 34, 52, 0.06);
-
-  --color-ink: #1a2234;
-  --color-ink-muted: #3d4a62;
-  --color-cream: #f8f6f1;
-  --color-cream-dark: #efe9df;
-  --color-white: #ffffff;
-
-  /* Primary accent — deep sea / slate teal */
-  --color-brand: #1a6b6b;
-  --color-brand-deep: #145856;
-  --color-brand-muted: #4a9e99;
-  --color-brand-subtle: rgba(26, 107, 107, 0.08);
-
-  /* Warm highlight — low light on the floor */
-  --color-accent: #c9a86c;
-  --color-accent-soft: rgba(201, 168, 108, 0.25);
-
-  /* Legacy mappings used in CMS components */
-  --color-framework: var(--color-ink);
-  --color-black: var(--color-ink);
-  --color-blue: var(--color-brand-deep);
-  --color-yellow: var(--color-accent);
-
-  --color-gray-50: #f6f6f8;
-  --color-gray-100: #eeeef1;
-  --color-gray-200: #e3e4e8;
-  --color-gray-300: #bbbdc9;
-  --color-gray-400: #9499ad;
-  --color-gray-500: #727892;
-  --color-gray-600: #515870;
-  --color-gray-700: #383d51;
-  --color-gray-800: #252837;
-  --color-gray-900: #1b1d27;
-  --color-gray-950: #13141b;
-
-  --default-transition-duration: 250ms;
-}
-
 /* Hero mesh — pure CSS, replace later with photography */
 .hero-mesh {
   background-color: var(--color-cream);
@@ -89,6 +86,12 @@
 }
 
 .photo-placeholder {
-  @apply relative overflow-hidden rounded-2xl border border-brand/15 bg-gradient-to-br from-brand-subtle via-cream to-cream-dark;
+  @apply relative overflow-hidden rounded-2xl border border-brand/15;
+  background: linear-gradient(
+    to bottom right,
+    var(--color-brand-subtle),
+    var(--color-cream),
+    var(--color-cream-dark)
+  );
   box-shadow: var(--shadow-card);
 }
