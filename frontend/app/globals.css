@@ -2,41 +2,45 @@
 
 @plugin "@tailwindcss/typography";
 
-/* Theme tokens must come before @layer base uses them in @apply */
+/* Theme tokens (tuned from dominant colours in app/favicon.ico) — must stay before @layer base */
 @theme {
-  --shadow-layer: 0 35px 60px -15px rgba(26, 34, 52, 0.18);
-  --shadow-card: 0 4px 24px -4px rgba(26, 34, 52, 0.08), 0 12px 32px -8px rgba(26, 34, 52, 0.06);
+  --shadow-layer: 0 35px 60px -15px rgba(42, 31, 54, 0.16);
+  --shadow-card: 0 4px 24px -4px rgba(42, 31, 54, 0.07), 0 12px 32px -8px rgba(42, 31, 54, 0.05);
 
-  --color-ink: #1a2234;
-  --color-ink-muted: #3d4a62;
-  --color-cream: #f8f6f1;
-  --color-cream-dark: #efe9df;
+  /* Purple ink from favicon (#783885 family), darkened for body copy */
+  --color-ink: #2a1f36;
+  --color-ink-muted: #5c4a6e;
+  --color-cream: #f2f1f0;
+  --color-cream-dark: #e4e2e4;
   --color-white: #ffffff;
 
-  --color-brand: #1a6b6b;
-  --color-brand-deep: #145856;
-  --color-brand-muted: #4a9e99;
-  --color-brand-subtle: rgba(26, 107, 107, 0.08);
+  /* Teal from favicon (#28aba3, #3ac1ad) */
+  --color-brand: #249b94;
+  --color-brand-deep: #1c7a75;
+  --color-brand-muted: #3ac1ad;
+  --color-brand-subtle: rgba(40, 171, 163, 0.1);
 
-  --color-accent: #c9a86c;
-  --color-accent-soft: rgba(201, 168, 108, 0.25);
+  /* Orange from favicon (#f5971e) */
+  --color-accent: #e8890f;
+  --color-accent-soft: rgba(245, 151, 30, 0.22);
 
   --color-framework: var(--color-ink);
   --color-black: var(--color-ink);
   --color-blue: var(--color-brand-deep);
   --color-yellow: var(--color-accent);
 
-  --color-gray-50: #f6f6f8;
-  --color-gray-100: #eeeef1;
-  --color-gray-200: #e3e4e8;
-  --color-gray-300: #bbbdc9;
-  --color-gray-400: #9499ad;
-  --color-gray-500: #727892;
-  --color-gray-600: #515870;
-  --color-gray-700: #383d51;
-  --color-gray-800: #252837;
-  --color-gray-900: #1b1d27;
-  --color-gray-950: #13141b;
+  /* Neutrals with a slight purple warmth to match the icon */
+  --color-gray-50: #f5f4f6;
+  --color-gray-100: #ebe9ee;
+  --color-gray-200: #dcd9e1;
+  --color-gray-300: #c0bac8;
+  --color-gray-400: #9a92a6;
+  --color-gray-500: #756a82;
+  --color-gray-600: #5a5068;
+  --color-gray-700: #423a4e;
+  --color-gray-800: #2e2838;
+  --color-gray-900: #221e2a;
+  --color-gray-950: #17141e;
 
   --default-transition-duration: 250ms;
 }
@@ -75,13 +79,13 @@
 .hero-mesh {
   background-color: var(--color-cream);
   background-image:
-    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(26, 107, 107, 0.18), transparent 50%),
-    radial-gradient(ellipse 80% 60% at 100% 50%, rgba(74, 158, 153, 0.12), transparent 45%),
-    radial-gradient(ellipse 70% 50% at 0% 80%, rgba(201, 168, 108, 0.1), transparent 40%);
+    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(40, 171, 163, 0.2), transparent 50%),
+    radial-gradient(ellipse 80% 60% at 100% 50%, rgba(112, 64, 140, 0.12), transparent 45%),
+    radial-gradient(ellipse 70% 50% at 0% 80%, rgba(245, 151, 30, 0.11), transparent 40%);
 }
 
 .hero-pattern {
-  background-image: radial-gradient(circle at center, rgba(26, 107, 107, 0.07) 1px, transparent 1px);
+  background-image: radial-gradient(circle at center, rgba(112, 64, 140, 0.08) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 

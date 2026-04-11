@@ -1,5 +1,7 @@
 import Link from 'next/link'
 
+import {SiteLogo} from '@/app/components/SiteLogo'
+
 const link =
   'text-cream/80 hover:text-white text-sm transition-colors duration-200 underline-offset-4 hover:underline'
 
@@ -12,11 +14,19 @@ export default function Footer() {
       />
       <div className="container relative">
         <div className="flex flex-col items-center gap-10 py-16 sm:py-20 lg:flex-row lg:justify-between lg:items-start">
-          <div className="text-center lg:text-left max-w-md space-y-3">
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">Isle of Man</p>
-            <h3 className="text-2xl sm:text-3xl font-semibold leading-tight font-[family-name:var(--font-fraunces)] text-white">
-              IoM Dance
-            </h3>
+          <div className="text-center lg:text-left max-w-md space-y-4">
+            <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start lg:items-center">
+              <SiteLogo
+                className="h-14 w-14 sm:h-16 sm:w-16 shrink-0 rounded-xl drop-shadow-[0_6px_22px_rgba(0,0,0,0.45)] ring-1 ring-white/15"
+                sizes="64px"
+              />
+              <div className="space-y-3 min-w-0">
+                <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">Isle of Man</p>
+                <h3 className="text-2xl sm:text-3xl font-semibold leading-tight font-[family-name:var(--font-fraunces)] text-white">
+                  IoM Dance
+                </h3>
+              </div>
+            </div>
             <p className="text-cream/75 font-light text-sm leading-relaxed">
               Social dance weekends and events — Modern Jive, Tango and more. All welcome, local or
               visiting from across the UK and Ireland.

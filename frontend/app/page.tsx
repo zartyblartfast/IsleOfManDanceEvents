@@ -1,4 +1,5 @@
 import {CtaLink} from '@/app/components/CtaLink'
+import {SiteLogo} from '@/app/components/SiteLogo'
 
 export default function Page() {
   return (
@@ -11,6 +12,12 @@ export default function Page() {
         />
         <div className="container relative px-4 py-20 sm:py-28 lg:py-32">
           <div className="mx-auto max-w-3xl text-center space-y-8 lg:max-w-4xl">
+            <div className="flex justify-center pt-2">
+              <SiteLogo
+                className="h-24 w-24 sm:h-32 sm:w-32 rounded-2xl shadow-[var(--shadow-card)] ring-1 ring-brand/20"
+                sizes="(max-width: 640px) 192px, 256px"
+              />
+            </div>
             <p className="text-xs sm:text-sm font-medium uppercase tracking-[0.25em] text-brand">
               Isle of Man · Social dance
             </p>

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import {SiteLogo} from '@/app/components/SiteLogo'
 import {settingsQuery} from '@/sanity/lib/queries'
 import {sanityFetch} from '@/sanity/lib/live'
 
@@ -15,10 +16,14 @@ export default async function Header() {
       <div className="container py-4 sm:py-6 px-2 sm:px-6">
         <div className="flex items-center justify-between gap-4">
           <Link
-            className="flex items-center gap-2 shrink-0 group"
+            className="flex items-center gap-3 shrink-0 group"
             href="/"
           >
-            <span className="h-8 w-1 rounded-full bg-gradient-to-b from-brand to-brand-muted group-hover:from-brand-muted group-hover:to-brand transition-colors" aria-hidden />
+            <SiteLogo
+              className="h-9 w-9 sm:h-10 sm:w-10 shrink-0 rounded-lg shadow-sm ring-1 ring-brand/15 transition-transform duration-200 group-hover:scale-[1.02]"
+              sizes="(max-width: 640px) 36px, 40px"
+              priority
+            />
             <span className="text-xl sm:text-2xl font-semibold tracking-tight text-ink font-[family-name:var(--font-fraunces)]">
               {settings?.title || 'IoM Dance'}
             </span>
