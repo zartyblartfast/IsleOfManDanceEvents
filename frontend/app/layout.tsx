@@ -14,6 +14,7 @@ import Header from '@/app/components/Header'
 import * as demo from '@/sanity/lib/demo'
 import {sanityFetch, SanityLive} from '@/sanity/lib/live'
 import {settingsQuery} from '@/sanity/lib/queries'
+import {getSiteUrl} from '@/sanity/lib/site'
 import {resolveOpenGraphImage} from '@/sanity/lib/utils'
 import {handleError} from '@/app/client-utils'
 
@@ -28,24 +29,37 @@ export async function generateMetadata(): Promise<Metadata> {
     stega: false,
   })
   const title = settings?.title || demo.title
-  const description = settings?.description || demo.description
+  const rawDesc = settings?.description
+  const description =
+    rawDesc && (!Array.isArray(rawDesc) || rawDesc.length > 0) ? rawDesc : demo.description
 
   const ogImage = resolveOpenGraphImage(settings?.ogImage)
   let metadataBase: URL | undefined = undefined
   try {
     metadataBase = settings?.ogImage?.metadataBase
       ? new URL(settings.ogImage.metadataBase)
-      : undefined
+      : new URL(getSiteUrl())
   } catch {
-    // ignore
+    try {
+      metadataBase = new URL(getSiteUrl())
+    } catch {
+      metadataBase = undefined
+    }
   }
+  let descriptionPlain: string
+  try {
+    descriptionPlain = toPlainText(description)
+  } catch {
+    descriptionPlain = 'Social dance weekends and events in the Isle of Man.'
+  }
+
   return {
     metadataBase,
     title: {
       template: `%s | ${title}`,
       default: title,
     },
-    description: toPlainText(description),
+    description: descriptionPlain,
     openGraph: {
       images: ogImage ? [ogImage] : [],
     },

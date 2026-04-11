@@ -1,94 +1,83 @@
-import {Suspense} from 'react'
-import Link from 'next/link'
-import {PortableText} from '@portabletext/react'
+import {CtaLink} from '@/app/components/CtaLink'
 
-import {AllPosts} from '@/app/components/Posts'
-import GetStartedCode from '@/app/components/GetStartedCode'
-import SideBySideIcons from '@/app/components/SideBySideIcons'
-import {settingsQuery} from '@/sanity/lib/queries'
-import {sanityFetch} from '@/sanity/lib/live'
-import {dataAttr} from '@/sanity/lib/utils'
-
-export default async function Page() {
-  const {data: settings} = await sanityFetch({
-    query: settingsQuery,
-  })
-
+export default function Page() {
   return (
-    <>
-      <div className="relative">
-        <div className="relative bg-[url(/images/tile-1-black.png)] bg-size-[5px]">
-          <div className="bg-gradient-to-b from-white w-full h-full absolute top-0"></div>
-          <div className="container">
-            <div className="relative min-h-[40vh] mx-auto max-w-2xl pt-10 xl:pt-20 pb-30 space-y-6 lg:max-w-4xl lg:px-12 flex flex-col items-center justify-center">
-              <div className="flex flex-col gap-4 items-center">
-                <div className="text-md leading-6 prose uppercase py-1 px-3 bg-white font-mono italic">
-                  A starter template for
-                </div>
-                <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-black">
-                  <Link
-                    className="underline decoration-brand hover:text-brand underline-offset-8 hover:underline-offset-4 transition-all ease-out"
-                    href="https://sanity.io/"
-                  >
-                    Sanity
-                  </Link>
-                  +
-                  <Link
-                    className="underline decoration-black text-framework underline-offset-8 hover:underline-offset-4 transition-all ease-out"
-                    href="https://nextjs.org/"
-                  >
-                    Next.js
-                  </Link>
-                </h1>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className=" flex flex-col items-center">
-          <SideBySideIcons />
-          <div className="container relative mx-auto max-w-2xl pb-20 pt-10 space-y-6 lg:max-w-4xl lg:px-12 flex flex-col items-center">
-            <div className="prose sm:prose-lg md:prose-xl xl:prose-2xl text-gray-700 prose-a:text-gray-700 font-light text-center">
-              {settings?.description && (
-                <div
-                  data-sanity={dataAttr({
-                    id: settings._id,
-                    type: 'settings',
-                    path: 'description',
-                  }).toString()}
-                >
-                  <PortableText value={settings.description} />
-                </div>
-              )}
-              <div className="flex items-center flex-col gap-4">
-                <GetStartedCode />
-                <Link
-                  href="https://www.sanity.io/docs"
-                  className="inline-flex text-brand text-xs md:text-sm underline hover:text-gray-900"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Sanity Documentation
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    className="w-4 h-4 ml-1 inline"
-                    fill="currentColor"
-                  >
-                    <path d="M10 6V8H5V19H16V14H18V20C18 20.5523 17.5523 21 17 21H4C3.44772 21 3 20.5523 3 20V7C3 6.44772 3.44772 6 4 6H10ZM21 3V12L17.206 8.207L11.2071 14.2071L9.79289 12.7929L15.792 6.793L12 3H21Z"></path>
-                  </svg>
-                </Link>
-              </div>
+    <div className="relative">
+      {/* Hero */}
+      <div className="relative bg-[url(/images/tile-1-black.png)] bg-size-[5px]">
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-white/95 to-white" />
+        <div className="container relative">
+          <div className="mx-auto max-w-3xl px-4 py-16 sm:py-24 lg:py-28 text-center space-y-8">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-balance text-gray-900">
+              Dance weekends and social dance events in the Isle of Man
+            </h1>
+            <p className="text-lg sm:text-xl text-gray-600 font-light leading-relaxed max-w-2xl mx-auto text-pretty">
+              Modern Jive, Tango and social dance events in beautiful Isle of Man venues — bringing
+              together local dancers and visitors from across the UK and Ireland.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch sm:items-center pt-2">
+              <CtaLink href="/posts">View Events</CtaLink>
+              <CtaLink href="/travel" variant="secondary">
+                Travel Information
+              </CtaLink>
             </div>
           </div>
         </div>
       </div>
-      <div className="border-t border-gray-100 bg-gray-50">
-        <div className="container">
-          <aside className="py-12 sm:py-20">
-            <Suspense>{await AllPosts()}</Suspense>
-          </aside>
+
+      <div className="border-t border-gray-100 bg-white">
+        <div className="container max-w-3xl px-4 py-16 sm:py-20 space-y-16">
+          <section className="prose prose-lg prose-gray max-w-none">
+            <h2 className="text-3xl font-semibold tracking-tight text-gray-900 not-prose mb-4">
+              Welcome to IoM Dance
+            </h2>
+            <p className="text-gray-600 font-light leading-relaxed">
+              IoM Dance is a new event website for social dance weekends and special events in the
+              Isle of Man. The aim is to create enjoyable, well-organised events that combine
+              dancing, beautiful locations and a friendly atmosphere.
+            </p>
+          </section>
+
+          <section
+            id="featured-event"
+            className="rounded-2xl border border-gray-200 bg-gray-50/80 p-8 sm:p-10 scroll-mt-28"
+          >
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900 mb-4">
+              Featured Event
+            </h2>
+            <h3 className="text-xl font-medium text-gray-900 mb-3">
+              Port Erin Modern Jive &amp; Tango Weekend
+            </h3>
+            <p className="text-gray-600 font-light leading-relaxed mb-8">
+              A planned weekend event combining separate Modern Jive and Tango sessions, social
+              dancing, travel advice and accommodation information in one of the Isle of Man&apos;s
+              most scenic locations.
+            </p>
+            <CtaLink href="/events/port-erin-weekend">Event Details</CtaLink>
+          </section>
+
+          <section className="prose prose-lg prose-gray max-w-none">
+            <h2 className="text-3xl font-semibold tracking-tight text-gray-900 not-prose mb-4">
+              Planning your visit
+            </h2>
+            <p className="text-gray-600 font-light leading-relaxed">
+              Travel advice, ferry options, accommodation ideas and local information will be
+              provided to help dancers visit the Isle of Man with confidence.
+            </p>
+          </section>
+
+          <section className="prose prose-lg prose-gray max-w-none border-t border-gray-100 pt-16">
+            <h2 className="text-3xl font-semibold tracking-tight text-gray-900 not-prose mb-4">
+              Interested in taking part?
+            </h2>
+            <p className="text-gray-600 font-light leading-relaxed mb-8">
+              Whether you are local to the Isle of Man or travelling from the UK or Ireland, we
+              would love to hear from you.
+            </p>
+            <CtaLink href="/contact">Contact Us</CtaLink>
+          </section>
         </div>
       </div>
-    </>
+    </div>
   )
 }

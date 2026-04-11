@@ -19,10 +19,8 @@ function envString(name: string): string | undefined {
   return t === '' ? undefined : t
 }
 
-export const dataset = assertValue(
-  envString('NEXT_PUBLIC_SANITY_DATASET'),
-  'Missing environment variable: NEXT_PUBLIC_SANITY_DATASET',
-)
+/** Prefer setting `NEXT_PUBLIC_SANITY_DATASET` in Vercel; defaults match this project’s dataset. */
+export const dataset = envString('NEXT_PUBLIC_SANITY_DATASET') ?? 'production'
 
 export const projectId = assertValue(
   envString('NEXT_PUBLIC_SANITY_PROJECT_ID'),

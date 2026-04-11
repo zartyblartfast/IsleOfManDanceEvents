@@ -74,18 +74,26 @@ export const MorePosts = async ({skip, limit}: {skip: string; limit: number}) =>
   )
 }
 
-export const AllPosts = async () => {
+export const AllPosts = async ({
+  heading = 'Recent posts',
+  subHeading,
+}: {
+  heading?: string
+  subHeading?: string
+} = {}) => {
   const {data} = await sanityFetch({query: allPostsQuery})
 
   if (!data || data.length === 0) {
     return <OnBoarding />
   }
 
+  const defaultSub =
+    data.length === 1
+      ? 'Published from Sanity Studio — more events and updates will appear here.'
+      : `These ${data.length} entries are loaded from Sanity Studio.`
+
   return (
-    <Posts
-      heading="Recent Posts"
-      subHeading={`${data.length === 1 ? 'This blog post is' : `These ${data.length} blog posts are`} populated from your Sanity Studio.`}
-    >
+    <Posts heading={heading} subHeading={subHeading ?? defaultSub}>
       {data.map((post: AllPostsQueryResult[number]) => (
         <Post key={post._id} post={post} />
       ))}
