@@ -2,7 +2,7 @@ import './globals.css'
 
 import {SpeedInsights} from '@vercel/speed-insights/next'
 import type {Metadata} from 'next'
-import {Inter, IBM_Plex_Mono} from 'next/font/google'
+import {Fraunces, Inter, IBM_Plex_Mono} from 'next/font/google'
 import {draftMode} from 'next/headers'
 import {toPlainText} from 'next-sanity'
 import {VisualEditing} from 'next-sanity/visual-editing'
@@ -72,6 +72,12 @@ const inter = Inter({
   display: 'swap',
 })
 
+const fraunces = Fraunces({
+  variable: '--font-fraunces',
+  subsets: ['latin'],
+  display: 'swap',
+})
+
 const ibmPlexMono = IBM_Plex_Mono({
   variable: '--font-ibm-plex-mono',
   weight: ['400'],
@@ -83,9 +89,12 @@ export default async function RootLayout({children}: {children: React.ReactNode}
   const {isEnabled: isDraftMode} = await draftMode()
 
   return (
-    <html lang="en" className={`${inter.variable} ${ibmPlexMono.variable} bg-white text-black`}>
-      <body>
-        <section className="min-h-screen pt-24">
+    <html
+      lang="en"
+      className={`${inter.variable} ${fraunces.variable} ${ibmPlexMono.variable}`}
+    >
+      <body className={`${inter.className} bg-cream text-ink`}>
+        <section className="flex min-h-screen flex-col pt-20 sm:pt-24">
           {/* The <Toaster> component is responsible for rendering toast notifications used in /app/client-utils.ts and /app/components/DraftModeToast.tsx */}
           <Toaster />
           {isDraftMode && (
@@ -98,7 +107,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
           {/* The <SanityLive> component is responsible for making all sanityFetch calls in your application live, so should always be rendered. */}
           <SanityLive onError={handleError} />
           <Header />
-          <main className="">{children}</main>
+          <main className="flex-1">{children}</main>
           <Footer />
         </section>
         <SpeedInsights />

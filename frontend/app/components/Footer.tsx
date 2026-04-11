@@ -1,24 +1,30 @@
 import Link from 'next/link'
 
-const link = 'hover:underline underline-offset-4'
+const link =
+  'text-cream/80 hover:text-white text-sm transition-colors duration-200 underline-offset-4 hover:underline'
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-50 relative border-t border-gray-100">
-      <div className="absolute inset-0 bg-[url(/images/tile-grid-black.png)] bg-size-[17px] opacity-20 bg-position-[0_1]" />
+    <footer className="relative mt-auto border-t border-white/10 bg-ink text-cream">
+      <div
+        className="absolute inset-0 opacity-[0.07] hero-pattern pointer-events-none"
+        aria-hidden
+      />
       <div className="container relative">
-        <div className="flex flex-col items-center gap-8 py-20 lg:flex-row lg:justify-between lg:items-start">
-          <div className="text-center lg:text-left max-w-md">
-            <h3 className="text-2xl font-mono leading-tight tracking-tighter text-gray-900 mb-3">
+        <div className="flex flex-col items-center gap-10 py-16 sm:py-20 lg:flex-row lg:justify-between lg:items-start">
+          <div className="text-center lg:text-left max-w-md space-y-3">
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">Isle of Man</p>
+            <h3 className="text-2xl sm:text-3xl font-semibold leading-tight font-[family-name:var(--font-fraunces)] text-white">
               IoM Dance
             </h3>
-            <p className="text-gray-600 font-light text-sm leading-relaxed">
-              Social dance weekends and events in the Isle of Man — Modern Jive, Tango and more.
+            <p className="text-cream/75 font-light text-sm leading-relaxed">
+              Social dance weekends and events — Modern Jive, Tango and more. All welcome, local or
+              visiting from across the UK and Ireland.
             </p>
           </div>
           <nav
             aria-label="Footer"
-            className="flex flex-wrap gap-x-6 gap-y-2 justify-center font-mono text-sm text-gray-700"
+            className="flex flex-wrap gap-x-8 gap-y-3 justify-center lg:justify-end text-sm"
           >
             <Link href="/" className={link}>
               Home
@@ -40,6 +46,9 @@ export default function Footer() {
             </Link>
           </nav>
         </div>
+        <p className="text-center lg:text-left pb-8 text-xs text-cream/45">
+          © {new Date().getFullYear()} IoM Dance · Isle of Man
+        </p>
       </div>
     </footer>
   )

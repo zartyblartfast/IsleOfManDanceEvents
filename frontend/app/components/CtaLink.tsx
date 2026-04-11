@@ -10,11 +10,11 @@ export function CtaLink({
   variant?: 'primary' | 'secondary'
 }) {
   const base =
-    'inline-flex items-center justify-center rounded-full font-mono text-sm sm:text-base whitespace-nowrap transition-colors duration-200 py-3 px-6 sm:py-3 sm:px-8'
+    'inline-flex items-center justify-center rounded-full text-sm sm:text-base font-medium tracking-wide whitespace-nowrap transition-colors duration-200 py-3 px-6 sm:px-8 shadow-sm'
   const styles =
     variant === 'primary'
-      ? 'bg-black text-white hover:bg-blue focus:bg-blue'
-      : 'border border-gray-300 bg-white text-gray-900 hover:border-gray-400 hover:bg-gray-50'
+      ? 'bg-brand text-white hover:bg-brand-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand'
+      : 'border-2 border-brand/25 bg-white/80 text-ink hover:border-brand/50 hover:bg-brand-subtle'
   return (
     <Link href={href} className={`${base} ${styles}`}>
       {children}

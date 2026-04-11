@@ -1,15 +1,27 @@
 @import 'tailwindcss';
 
-@plugin "@tailwindcss/typography";
+@plugin "@tailwindcss/typography';
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply antialiased bg-cream text-ink;
+  }
+
   h1,
   h2,
-  h3,
+  h3 {
+    font-family: var(--font-fraunces), ui-serif, Georgia, serif;
+    @apply font-semibold tracking-tight text-ink;
+  }
+
   h4,
   h5,
   h6 {
-    @apply font-medium tracking-tight;
+    @apply font-medium tracking-tight text-ink;
   }
 }
 
@@ -20,15 +32,33 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* IoM Dance — coastal evening + warm dance-floor accent (no photos required) */
 @theme {
-  --shadow-layer: 0 35px 60px -15px rgba(0, 0, 0, 0.3);
+  --shadow-layer: 0 35px 60px -15px rgba(26, 34, 52, 0.18);
+  --shadow-card: 0 4px 24px -4px rgba(26, 34, 52, 0.08), 0 12px 32px -8px rgba(26, 34, 52, 0.06);
 
-  --color-framework: #000;
-  --color-black: #0b0b0b;
-  --color-white: #fff;
-  --color-brand: #f50;
-  --color-blue: #0052ff;
-  --color-yellow: #cdea19;
+  --color-ink: #1a2234;
+  --color-ink-muted: #3d4a62;
+  --color-cream: #f8f6f1;
+  --color-cream-dark: #efe9df;
+  --color-white: #ffffff;
+
+  /* Primary accent — deep sea / slate teal */
+  --color-brand: #1a6b6b;
+  --color-brand-deep: #145856;
+  --color-brand-muted: #4a9e99;
+  --color-brand-subtle: rgba(26, 107, 107, 0.08);
+
+  /* Warm highlight — low light on the floor */
+  --color-accent: #c9a86c;
+  --color-accent-soft: rgba(201, 168, 108, 0.25);
+
+  /* Legacy mappings used in CMS components */
+  --color-framework: var(--color-ink);
+  --color-black: var(--color-ink);
+  --color-blue: var(--color-brand-deep);
+  --color-yellow: var(--color-accent);
+
   --color-gray-50: #f6f6f8;
   --color-gray-100: #eeeef1;
   --color-gray-200: #e3e4e8;
@@ -42,4 +72,23 @@
   --color-gray-950: #13141b;
 
   --default-transition-duration: 250ms;
+}
+
+/* Hero mesh — pure CSS, replace later with photography */
+.hero-mesh {
+  background-color: var(--color-cream);
+  background-image:
+    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(26, 107, 107, 0.18), transparent 50%),
+    radial-gradient(ellipse 80% 60% at 100% 50%, rgba(74, 158, 153, 0.12), transparent 45%),
+    radial-gradient(ellipse 70% 50% at 0% 80%, rgba(201, 168, 108, 0.1), transparent 40%);
+}
+
+.hero-pattern {
+  background-image: radial-gradient(circle at center, rgba(26, 107, 107, 0.07) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.photo-placeholder {
+  @apply relative overflow-hidden rounded-2xl border border-brand/15 bg-gradient-to-br from-brand-subtle via-cream to-cream-dark;
+  box-shadow: var(--shadow-card);
 }

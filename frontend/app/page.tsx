@@ -3,35 +3,50 @@ import {CtaLink} from '@/app/components/CtaLink'
 export default function Page() {
   return (
     <div className="relative">
-      {/* Hero */}
-      <div className="relative bg-[url(/images/tile-1-black.png)] bg-size-[5px]">
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-white/95 to-white" />
-        <div className="container relative">
-          <div className="mx-auto max-w-3xl px-4 py-16 sm:py-24 lg:py-28 text-center space-y-8">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-balance text-gray-900">
+      {/* Hero — CSS-only; swap in photography later */}
+      <section className="relative hero-mesh hero-pattern overflow-hidden">
+        <div
+          className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-cream to-transparent pointer-events-none"
+          aria-hidden
+        />
+        <div className="container relative px-4 py-20 sm:py-28 lg:py-32">
+          <div className="mx-auto max-w-3xl text-center space-y-8 lg:max-w-4xl">
+            <p className="text-xs sm:text-sm font-medium uppercase tracking-[0.25em] text-brand">
+              Isle of Man · Social dance
+            </p>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[3.25rem] leading-[1.1] text-balance text-ink">
               Dance weekends and social dance events in the Isle of Man
             </h1>
-            <p className="text-lg sm:text-xl text-gray-600 font-light leading-relaxed max-w-2xl mx-auto text-pretty">
-              Modern Jive, Tango and social dance events in beautiful Isle of Man venues — bringing
-              together local dancers and visitors from across the UK and Ireland.
+            <p className="text-lg sm:text-xl text-ink-muted font-light leading-relaxed max-w-2xl mx-auto text-pretty">
+              Modern Jive, Tango and social dance in beautiful venues — bringing together local
+              dancers and visitors from across the UK and Ireland.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch sm:items-center pt-2">
-              <CtaLink href="/events">View Events</CtaLink>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch sm:items-center pt-4">
+              <CtaLink href="/events">View events</CtaLink>
               <CtaLink href="/travel" variant="secondary">
-                Travel Information
+                Travel information
               </CtaLink>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div className="border-t border-gray-100 bg-white">
-        <div className="container max-w-3xl px-4 py-16 sm:py-20 space-y-16">
-          <section className="prose prose-lg prose-gray max-w-none">
-            <h2 className="text-3xl font-semibold tracking-tight text-gray-900 not-prose mb-4">
-              Welcome to IoM Dance
-            </h2>
-            <p className="text-gray-600 font-light leading-relaxed">
+          {/* Photo placeholder — replace with &lt;Image /&gt; when you have assets */}
+          <div className="mx-auto mt-16 max-w-4xl photo-placeholder aspect-[21/9] sm:aspect-[2.4/1] flex flex-col items-center justify-center gap-2 px-6 text-center">
+            <span className="text-xs font-medium uppercase tracking-widest text-brand/50">
+              Photography
+            </span>
+            <p className="text-sm text-ink-muted/80 max-w-sm font-light italic">
+              Venue and event photos will sit here — for now, enjoy the calm of an empty dance floor
+              before the music starts.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div className="border-t border-brand/10 bg-cream">
+        <div className="container max-w-3xl px-4 py-16 sm:py-24 space-y-20 lg:max-w-4xl">
+          <section className="space-y-4">
+            <h2 className="text-3xl sm:text-4xl text-ink">Welcome to IoM Dance</h2>
+            <p className="text-lg text-ink-muted font-light leading-relaxed">
               IoM Dance is a new event website for social dance weekends and special events in the
               Isle of Man. The aim is to create enjoyable, well-organised events that combine
               dancing, beautiful locations and a friendly atmosphere.
@@ -40,41 +55,35 @@ export default function Page() {
 
           <section
             id="featured-event"
-            className="rounded-2xl border border-gray-200 bg-gray-50/80 p-8 sm:p-10 scroll-mt-28"
+            className="scroll-mt-28 rounded-2xl border border-brand/15 bg-white p-8 sm:p-10 shadow-[var(--shadow-card)] ring-1 ring-brand/5"
           >
-            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900 mb-4">
-              Featured Event
-            </h2>
-            <h3 className="text-xl font-medium text-gray-900 mb-3">
-              Port Erin Modern Jive &amp; Tango Weekend
-            </h3>
-            <p className="text-gray-600 font-light leading-relaxed mb-8">
-              A planned weekend event combining separate Modern Jive and Tango sessions, social
-              dancing, travel advice and accommodation information in one of the Isle of Man&apos;s
-              most scenic locations.
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand mb-3">
+              Featured
             </p>
-            <CtaLink href="/events/port-erin-weekend">Event Details</CtaLink>
+            <h2 className="text-2xl sm:text-3xl text-ink mb-2">Port Erin Modern Jive &amp; Tango Weekend</h2>
+            <p className="text-ink-muted font-light leading-relaxed mb-8 max-w-2xl">
+              A planned weekend combining separate Modern Jive and Tango sessions, social dancing,
+              travel advice and accommodation information in one of the Isle of Man&apos;s most scenic
+              locations.
+            </p>
+            <CtaLink href="/events/port-erin-weekend">Event details</CtaLink>
           </section>
 
-          <section className="prose prose-lg prose-gray max-w-none">
-            <h2 className="text-3xl font-semibold tracking-tight text-gray-900 not-prose mb-4">
-              Planning your visit
-            </h2>
-            <p className="text-gray-600 font-light leading-relaxed">
+          <section className="space-y-4">
+            <h2 className="text-3xl sm:text-4xl text-ink">Planning your visit</h2>
+            <p className="text-lg text-ink-muted font-light leading-relaxed">
               Travel advice, ferry options, accommodation ideas and local information will be
               provided to help dancers visit the Isle of Man with confidence.
             </p>
           </section>
 
-          <section className="prose prose-lg prose-gray max-w-none border-t border-gray-100 pt-16">
-            <h2 className="text-3xl font-semibold tracking-tight text-gray-900 not-prose mb-4">
-              Interested in taking part?
-            </h2>
-            <p className="text-gray-600 font-light leading-relaxed mb-8">
-              Whether you are local to the Isle of Man or travelling from the UK or Ireland, we
-              would love to hear from you.
+          <section className="space-y-6 border-t border-brand/10 pt-16">
+            <h2 className="text-3xl sm:text-4xl text-ink">Interested in taking part?</h2>
+            <p className="text-lg text-ink-muted font-light leading-relaxed">
+              Whether you are local to the Isle of Man or travelling from the UK or Ireland, we would
+              love to hear from you.
             </p>
-            <CtaLink href="/contact">Contact Us</CtaLink>
+            <CtaLink href="/contact">Contact us</CtaLink>
           </section>
         </div>
       </div>

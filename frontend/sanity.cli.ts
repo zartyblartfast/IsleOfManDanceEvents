@@ -12,14 +12,11 @@ function readEnv(name: string): string | undefined {
   return v.replace(/^["']|["']$/g, '').trim() || undefined
 }
 
-const projectId = readEnv('NEXT_PUBLIC_SANITY_PROJECT_ID')
-const dataset = readEnv('NEXT_PUBLIC_SANITY_DATASET') ?? 'production'
+/** Used when `frontend/.env.local` is missing so `sanity typegen` / `predev` still run locally. */
+const PROJECT_FALLBACK = 'qjvhv9py'
 
-if (!projectId) {
-  throw new Error(
-    'Missing NEXT_PUBLIC_SANITY_PROJECT_ID (required for sanity typegen during npm run build)',
-  )
-}
+const projectId = readEnv('NEXT_PUBLIC_SANITY_PROJECT_ID') ?? PROJECT_FALLBACK
+const dataset = readEnv('NEXT_PUBLIC_SANITY_DATASET') ?? 'production'
 
 export default defineCliConfig({
   api: {

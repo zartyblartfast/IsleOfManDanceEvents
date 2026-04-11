@@ -19,7 +19,7 @@ export default function TravelPage() {
         <p className="text-gray-600 font-light leading-relaxed">
           Detailed travel advice, ferry options, and local tips will appear here. For now, see the
           overview on the{' '}
-          <Link href="/" className="text-brand underline hover:text-gray-900 underline-offset-4">
+          <Link href="/" className="text-brand underline hover:text-brand-deep underline-offset-4">
             home page
           </Link>
           .

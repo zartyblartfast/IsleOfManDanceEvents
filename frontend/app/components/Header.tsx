@@ -2,7 +2,8 @@ import Link from 'next/link'
 import {settingsQuery} from '@/sanity/lib/queries'
 import {sanityFetch} from '@/sanity/lib/live'
 
-const navLinkClass = 'hover:underline underline-offset-4'
+const navLinkClass =
+  'text-ink/75 hover:text-brand font-medium text-sm transition-colors duration-200 hover:underline underline-offset-4 decoration-brand/40'
 
 export default async function Header() {
   const {data: settings} = await sanityFetch({
@@ -10,11 +11,15 @@ export default async function Header() {
   })
 
   return (
-    <header className="fixed z-50 h-24 inset-0 bg-white/80 flex items-center backdrop-blur-lg">
-      <div className="container py-6 px-2 sm:px-6">
-        <div className="flex items-center justify-between gap-5">
-          <Link className="flex items-center gap-2 shrink-0" href="/">
-            <span className="text-lg sm:text-2xl pl-2 font-semibold">
+    <header className="fixed z-50 h-20 sm:h-24 inset-0 flex items-center border-b border-brand/10 bg-cream/85 backdrop-blur-md">
+      <div className="container py-4 sm:py-6 px-2 sm:px-6">
+        <div className="flex items-center justify-between gap-4">
+          <Link
+            className="flex items-center gap-2 shrink-0 group"
+            href="/"
+          >
+            <span className="h-8 w-1 rounded-full bg-gradient-to-b from-brand to-brand-muted group-hover:from-brand-muted group-hover:to-brand transition-colors" aria-hidden />
+            <span className="text-xl sm:text-2xl font-semibold tracking-tight text-ink font-[family-name:var(--font-fraunces)]">
               {settings?.title || 'IoM Dance'}
             </span>
           </Link>
@@ -22,7 +27,7 @@ export default async function Header() {
           <nav aria-label="Main">
             <ul
               role="list"
-              className="flex flex-wrap items-center justify-end gap-x-3 gap-y-2 md:gap-x-5 leading-5 text-xs sm:text-sm tracking-tight font-mono"
+              className="flex flex-wrap items-center justify-end gap-x-2 sm:gap-x-4 gap-y-2 text-xs sm:text-sm"
             >
               <li>
                 <Link href="/" className={navLinkClass}>
@@ -51,7 +56,7 @@ export default async function Header() {
               </li>
               <li>
                 <Link
-                  className="rounded-full inline-flex bg-black hover:bg-blue focus:bg-blue py-2 px-3 sm:px-5 text-white transition-colors duration-200"
+                  className="rounded-full inline-flex items-center bg-brand hover:bg-brand-deep py-2 px-3 sm:px-5 text-white text-sm font-medium shadow-sm transition-colors duration-200"
                   href="/contact"
                 >
                   Contact
