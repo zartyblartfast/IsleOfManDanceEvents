@@ -6,8 +6,20 @@
 
 import {defineCliConfig} from 'sanity/cli'
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '<your project ID>'
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
+function readEnv(name: string): string | undefined {
+  const v = process.env[name]
+  if (v == null || v === '') return undefined
+  return v.replace(/^["']|["']$/g, '').trim() || undefined
+}
+
+const projectId = readEnv('NEXT_PUBLIC_SANITY_PROJECT_ID')
+const dataset = readEnv('NEXT_PUBLIC_SANITY_DATASET') ?? 'production'
+
+if (!projectId) {
+  throw new Error(
+    'Missing NEXT_PUBLIC_SANITY_PROJECT_ID (required for sanity typegen during npm run build)',
+  )
+}
 
 export default defineCliConfig({
   api: {

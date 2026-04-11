@@ -96,6 +96,44 @@ When you **publish** new content in Studio, the next request from the site can s
 
 ---
 
+## Preview deployments (Vercel + Sanity)
+
+A **preview** is a separate deployment Vercel builds for a **branch** or **pull request**. It gets its own URL (for example `https://isle-of-man-dance-events-frontend-git-some-branch-zartyblartfast.vercel.app`), not your main production URL. You want previews to use the **same Sanity project** as production for testing, but you must give them **environment variables** and **CORS** access.
+
+### 1. Vercel — attach env vars to Preview
+
+1. Open your project on [Vercel](https://vercel.com) → **Settings** → **Environment Variables**.
+2. For **each** variable you already use in Production (`NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `NEXT_PUBLIC_SANITY_API_VERSION`, `NEXT_PUBLIC_SANITY_STUDIO_URL`, `SANITY_API_READ_TOKEN`), ensure **Preview** is enabled (checkbox or “Environments” column).
+   - If a variable is only on **Production**, open it → **Edit** → add **Preview** (you can use the **same values** as production for this repo).
+3. **Redeploy** an existing preview after saving, or push a new commit so the next preview build picks up the variables.
+
+Without this, preview builds can fail (missing `NEXT_PUBLIC_*`) or behave oddly (missing token).
+
+**Tip:** Copy-paste values carefully—**no trailing spaces** (the same issue that broke an earlier deploy).
+
+### 2. Sanity — allow preview URLs (CORS)
+
+Preview hostnames are different every branch unless you use a fixed preview domain. The usual fix is one extra origin:
+
+1. [Sanity Manage](https://www.sanity.io/manage) → your project → **API** → **CORS origins** → **Add CORS origin**.
+2. Add: **`https://*.vercel.app`**
+3. **Credentials:** **Allowed** (to match your other entries).
+
+That wildcard covers typical Vercel preview URLs. Your existing production origin (e.g. `https://isle-of-man-dance-events-frontend.vercel.app`) stays as-is.
+
+### 3. What stays the same
+
+- **`NEXT_PUBLIC_SANITY_STUDIO_URL`** on previews can still be your hosted Studio, e.g. `https://iom-dance-events.sanity.studio` (editors use one Studio; you’re only previewing the **site** code).
+- This template does **not** require a separate “preview-only” Sanity dataset for basic branch previews.
+
+### 4. Check that it works
+
+1. Create a branch, make a tiny change, push to GitHub, open the **PR** (or use Vercel’s **Deployments** tab).
+2. Open the **Preview** URL Vercel shows.
+3. If the page errors when loading content, check the browser **Developer tools → Network** for blocked requests, then re-check **Preview env vars** and **CORS**.
+
+---
+
 ## Glossary (quick)
 
 | Term | Meaning |

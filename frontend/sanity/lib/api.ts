@@ -11,13 +11,21 @@ function assertValue<T>(v: T | undefined, errorMessage: string): T {
   return v
 }
 
+/** Trim and strip accidental wrapping quotes from Vercel / copy-paste. */
+function envString(name: string): string | undefined {
+  const v = process.env[name]
+  if (v == null || v === '') return undefined
+  const t = v.replace(/^["']|["']$/g, '').trim()
+  return t === '' ? undefined : t
+}
+
 export const dataset = assertValue(
-  process.env.NEXT_PUBLIC_SANITY_DATASET,
+  envString('NEXT_PUBLIC_SANITY_DATASET'),
   'Missing environment variable: NEXT_PUBLIC_SANITY_DATASET',
 )
 
 export const projectId = assertValue(
-  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+  envString('NEXT_PUBLIC_SANITY_PROJECT_ID'),
   'Missing environment variable: NEXT_PUBLIC_SANITY_PROJECT_ID',
 )
 
