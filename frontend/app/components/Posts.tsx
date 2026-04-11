@@ -4,9 +4,24 @@ import {sanityFetch} from '@/sanity/lib/live'
 import {morePostsQuery, allPostsQuery} from '@/sanity/lib/queries'
 import {AllPostsQueryResult} from '@/sanity.types'
 import DateComponent from '@/app/components/Date'
-import OnBoarding from '@/app/components/Onboarding'
 import Avatar from '@/app/components/Avatar'
 import {dataAttr} from '@/sanity/lib/utils'
+
+/** Empty CMS — keep server-only to avoid client bundles pulling `sanity/lib/api` (fragile on edge). */
+function EmptyPostList() {
+  return (
+    <div
+      className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-10 text-center space-y-3"
+      role="status"
+    >
+      <p className="text-gray-800 font-medium">No events or updates yet</p>
+      <p className="text-sm text-gray-600 font-light max-w-md mx-auto leading-relaxed">
+        When posts are published in Sanity Studio, they will appear here. You can still browse other
+        sections using the menu above.
+      </p>
+    </div>
+  )
+}
 
 const Post = ({post}: {post: AllPostsQueryResult[number]}) => {
   const {_id, title, slug, excerpt, date, author} = post
@@ -84,7 +99,7 @@ export const AllPosts = async ({
   const {data} = await sanityFetch({query: allPostsQuery})
 
   if (!data || data.length === 0) {
-    return <OnBoarding />
+    return <EmptyPostList />
   }
 
   const defaultSub =
