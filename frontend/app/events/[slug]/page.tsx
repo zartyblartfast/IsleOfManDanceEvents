@@ -141,7 +141,7 @@ export default async function EventPage(props: Props) {
 
       {/* Page builder sections */}
       {event.pageBuilder && event.pageBuilder.length > 0 && (
-        <PageBuilderPage page={event as unknown as GetEventQueryResult} />
+        <PageBuilderPage page={event} />
       )}
     </div>
   )
