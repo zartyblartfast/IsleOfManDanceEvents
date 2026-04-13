@@ -2,6 +2,8 @@ import {Suspense} from 'react'
 import type {Metadata} from 'next'
 
 import {AllPosts} from '@/app/components/Posts'
+import {AllEvents} from '@/app/components/Events'
+import {PageLayout} from '@/app/components/PageLayout'
 
 export const metadata: Metadata = {
   title: 'Events',
@@ -10,28 +12,32 @@ export const metadata: Metadata = {
 
 export default function EventsPage() {
   return (
-    <div className="border-t border-brand/5 bg-cream">
-      <div className="container px-4 py-16 sm:py-20">
-        <div className="max-w-3xl mb-12 lg:max-w-4xl">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-brand mb-3">What&apos;s on</p>
-          <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-ink mb-4 font-[family-name:var(--font-fraunces)]">
-            Events &amp; updates
-          </h1>
-          <p className="text-lg text-ink-muted font-light leading-relaxed">
-            News and announcements from IoM Dance. Full event listings will grow as we add content in
-            the CMS.
-          </p>
-        </div>
+    <PageLayout
+      eyebrow="What's on"
+      title="Events & updates"
+      description="News and announcements from IoM Dance. Full event listings will grow as we add content in the CMS."
+      prose={false}
+    >
+      <div className="space-y-16">
         <Suspense
           fallback={
             <p className="text-sm text-ink-muted font-light" aria-live="polite">
-              Loading…
+              Loading events…
             </p>
           }
         >
-          <AllPosts heading="Latest" />
+          <AllEvents />
+        </Suspense>
+        <Suspense
+          fallback={
+            <p className="text-sm text-ink-muted font-light" aria-live="polite">
+              Loading posts…
+            </p>
+          }
+        >
+          <AllPosts heading="Latest posts" />
         </Suspense>
       </div>
-    </div>
+    </PageLayout>
   )
 }

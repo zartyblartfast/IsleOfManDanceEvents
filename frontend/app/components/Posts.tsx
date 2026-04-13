@@ -107,7 +107,7 @@ export const AllPosts = async ({
   const {data} = await sanityFetch({query: allPostsQuery})
 
   if (!data || data.length === 0) {
-    return <EmptyPostList />
+    return null
   }
 
   const defaultSub =

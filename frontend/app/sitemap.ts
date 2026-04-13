@@ -14,39 +14,47 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   })
   const headersList = await headers()
   const sitemap: MetadataRoute.Sitemap = []
-  const domain: string = headersList.get('host') as string
+  const host = headersList.get('host') ?? 'localhost:3000'
+  const baseUrl = `https://${host}`
   sitemap.push({
-    url: domain as string,
+    url: baseUrl,
     lastModified: new Date(),
     priority: 1,
     changeFrequency: 'monthly',
   })
 
   if (allPostsAndPages != null && allPostsAndPages.data.length != 0) {
-    let priority: number
-    let changeFrequency:
-      | 'monthly'
-      | 'always'
-      | 'hourly'
-      | 'daily'
-      | 'weekly'
-      | 'yearly'
-      | 'never'
-      | undefined
-    let url: string
-
     for (const p of allPostsAndPages.data) {
+      let priority: number
+      let changeFrequency:
+        | 'monthly'
+        | 'always'
+        | 'hourly'
+        | 'daily'
+        | 'weekly'
+        | 'yearly'
+        | 'never'
+        | undefined
+      let url: string
+
       switch (p._type) {
         case 'page':
           priority = 0.8
           changeFrequency = 'monthly'
-          url = `${domain}/${p.slug}`
+          url = `${baseUrl}/${p.slug}`
           break
         case 'post':
           priority = 0.5
           changeFrequency = 'never'
-          url = `${domain}/posts/${p.slug}`
+          url = `${baseUrl}/posts/${p.slug}`
           break
+        case 'event':
+          priority = 0.7
+          changeFrequency = 'weekly'
+          url = `${baseUrl}/events/${p.slug}`
+          break
+        default:
+          continue
       }
       sitemap.push({
         lastModified: p._updatedAt || new Date(),

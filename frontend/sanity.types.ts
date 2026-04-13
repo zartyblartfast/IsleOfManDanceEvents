@@ -29,12 +29,20 @@ export type PostReference = {
   [internalGroqTypeReferenceTo]?: 'post'
 }
 
+export type EventReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'event'
+}
+
 export type Link = {
   _type: 'link'
-  linkType?: 'href' | 'page' | 'post'
+  linkType?: 'href' | 'page' | 'post' | 'event'
   href?: string
   page?: PageReference
   post?: PostReference
+  event?: EventReference
   openInNewTab?: boolean
 }
 
@@ -127,6 +135,62 @@ export type Button = {
   link?: Link
 }
 
+export type Event = {
+  _id: string
+  _type: 'event'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  slug: Slug
+  excerpt?: string
+  dateStart: string
+  dateEnd?: string
+  venue?: string
+  danceStyles?: Array<string>
+  status: 'planned' | 'confirmed' | 'sold-out' | 'cancelled'
+  bookingUrl?: string
+  content?: BlockContent
+  pageBuilder?: Array<
+    | ({
+        _key: string
+      } & CallToAction)
+    | ({
+        _key: string
+      } & InfoSection)
+  >
+  coverImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+}
+
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop'
+  top: number
+  bottom: number
+  left: number
+  right: number
+}
+
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x: number
+  y: number
+  height: number
+  width: number
+}
+
+export type Slug = {
+  _type: 'slug'
+  current: string
+  source?: string
+}
+
 export type Settings = {
   _id: string
   _type: 'settings'
@@ -156,6 +220,12 @@ export type Settings = {
     _type: 'block'
     _key: string
   }>
+  navigation?: Array<{
+    label: string
+    link?: Link
+    _type: 'navItem'
+    _key: string
+  }>
   ogImage?: {
     asset?: SanityImageAssetReference
     media?: unknown
@@ -165,22 +235,6 @@ export type Settings = {
     metadataBase?: string
     _type: 'image'
   }
-}
-
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top: number
-  bottom: number
-  left: number
-  right: number
-}
-
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x: number
-  y: number
-  height: number
-  width: number
 }
 
 export type Page = {
@@ -193,6 +247,7 @@ export type Page = {
   slug: Slug
   heading: string
   subheading?: string
+  content?: BlockContent
   pageBuilder?: Array<
     | ({
         _key: string
@@ -248,12 +303,6 @@ export type Person = {
     alt?: string
     _type: 'image'
   }
-}
-
-export type Slug = {
-  _type: 'slug'
-  current: string
-  source?: string
 }
 
 export type SanityAssistInstructionTask = {
@@ -493,6 +542,7 @@ export type Geopoint = {
 export type AllSanitySchemaTypes =
   | PageReference
   | PostReference
+  | EventReference
   | Link
   | SanityImageAssetReference
   | CallToAction
@@ -500,14 +550,15 @@ export type AllSanitySchemaTypes =
   | BlockContentTextOnly
   | BlockContent
   | Button
-  | Settings
+  | Event
   | SanityImageCrop
   | SanityImageHotspot
+  | Slug
+  | Settings
   | Page
   | PersonReference
   | Post
   | Person
-  | Slug
   | SanityAssistInstructionTask
   | SanityAssistTaskStatus
   | SanityAssistSchemaTypeAnnotations
@@ -532,7 +583,7 @@ export type AllSanitySchemaTypes =
 
 // Source: sanity/lib/queries.ts
 // Variable: settingsQuery
-// Query: *[_type == "settings"][0]
+// Query: *[_type == "settings"][0]{  ...,  navigation[]{    ...,    link {      ...,      "page": page->slug.current,      "post": post->slug.current,      "event": event->slug.current    }  }}
 export type SettingsQueryResult = {
   _id: string
   _type: 'settings'
@@ -562,6 +613,20 @@ export type SettingsQueryResult = {
     _type: 'block'
     _key: string
   }>
+  navigation: Array<{
+    label: string
+    link: {
+      _type: 'link'
+      linkType?: 'event' | 'href' | 'page' | 'post'
+      href?: string
+      page: string | null
+      post: string | null
+      event: string | null
+      openInNewTab?: boolean
+    } | null
+    _type: 'navItem'
+    _key: string
+  }> | null
   ogImage?: {
     asset?: SanityImageAssetReference
     media?: unknown
@@ -575,7 +640,7 @@ export type SettingsQueryResult = {
 
 // Source: sanity/lib/queries.ts
 // Variable: getPageQuery
-// Query: *[_type == 'page' && slug.current == $slug][0]{    _id,    _type,    name,    slug,    heading,    subheading,    "pageBuilder": pageBuilder[]{      ...,      _type == "callToAction" => {        ...,        button {          ...,            link {      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }      }        }      },      _type == "infoSection" => {        content[]{          ...,          markDefs[]{            ...,              _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }          }        }      },    },  }
+// Query: *[_type == 'page' && slug.current == $slug][0]{    _id,    _type,    name,    slug,    heading,    subheading,    content[]{      ...,      markDefs[]{        ...,          _type == "link" => {    "page": page->slug.current,    "post": post->slug.current,    "event": event->slug.current  }      }    },    "pageBuilder": pageBuilder[]{      ...,      _type == "callToAction" => {        ...,        button {          ...,            link {      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current,    "event": event->slug.current  }      }        }      },      _type == "infoSection" => {        content[]{          ...,          markDefs[]{            ...,              _type == "link" => {    "page": page->slug.current,    "post": post->slug.current,    "event": event->slug.current  }          }        }      },    },  }
 export type GetPageQueryResult = {
   _id: string
   _type: 'page'
@@ -583,6 +648,40 @@ export type GetPageQueryResult = {
   slug: Slug
   heading: string
   subheading: string | null
+  content: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: 'span'
+          _key: string
+        }>
+        style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+        listItem?: 'bullet' | 'number'
+        markDefs: Array<{
+          linkType?: 'href' | 'page' | 'post'
+          href?: string
+          page: string | null
+          post: string | null
+          openInNewTab?: boolean
+          _type: 'link'
+          _key: string
+          event: null
+        }> | null
+        level?: number
+        _type: 'block'
+        _key: string
+      }
+    | {
+        asset?: SanityImageAssetReference
+        media?: unknown
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        _type: 'image'
+        _key: string
+        markDefs: null
+      }
+  > | null
   pageBuilder: Array<
     | {
         _key: string
@@ -595,10 +694,11 @@ export type GetPageQueryResult = {
           buttonText?: string
           link: {
             _type: 'link'
-            linkType?: 'href' | 'page' | 'post'
+            linkType?: 'event' | 'href' | 'page' | 'post'
             href?: string
             page: string | null
             post: string | null
+            event: string | null
             openInNewTab?: boolean
           } | null
         } | null
@@ -635,6 +735,7 @@ export type GetPageQueryResult = {
                 openInNewTab?: boolean
                 _type: 'link'
                 _key: string
+                event: null
               }> | null
               level?: number
               _type: 'block'
@@ -656,8 +757,13 @@ export type GetPageQueryResult = {
 
 // Source: sanity/lib/queries.ts
 // Variable: sitemapData
-// Query: *[_type == "page" || _type == "post" && defined(slug.current)] | order(_type asc) {    "slug": slug.current,    _type,    _updatedAt,  }
+// Query: *[(_type == "page" || _type == "post" || _type == "event") && defined(slug.current)] | order(_type asc) {    "slug": slug.current,    _type,    _updatedAt,  }
 export type SitemapDataResult = Array<
+  | {
+      slug: string
+      _type: 'event'
+      _updatedAt: string
+    }
   | {
       slug: string
       _type: 'page'
@@ -736,7 +842,7 @@ export type MorePostsQueryResult = Array<{
 
 // Source: sanity/lib/queries.ts
 // Variable: postQuery
-// Query: *[_type == "post" && slug.current == $slug] [0] {    content[]{    ...,    markDefs[]{      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }    }  },      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{firstName, lastName, picture},  }
+// Query: *[_type == "post" && slug.current == $slug] [0] {    content[]{    ...,    markDefs[]{      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current,    "event": event->slug.current  }    }  },      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  coverImage,  "date": coalesce(date, _updatedAt),  "author": author->{firstName, lastName, picture},  }
 export type PostQueryResult = {
   content: Array<
     | {
@@ -756,6 +862,7 @@ export type PostQueryResult = {
           openInNewTab?: boolean
           _type: 'link'
           _key: string
+          event: null
         }> | null
         level?: number
         _type: 'block'
@@ -813,17 +920,208 @@ export type PagesSlugsResult = Array<{
   slug: string
 }>
 
+// Source: sanity/lib/queries.ts
+// Variable: allEventsQuery
+// Query: *[_type == "event" && defined(slug.current)] | order(dateStart asc) {      _id,  _type,  "title": coalesce(title, "Untitled event"),  "slug": slug.current,  excerpt,  coverImage,  dateStart,  dateEnd,  venue,  danceStyles,  status,  bookingUrl,  }
+export type AllEventsQueryResult = Array<{
+  _id: string
+  _type: 'event'
+  title: string
+  slug: string
+  excerpt: string | null
+  coverImage: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  } | null
+  dateStart: string
+  dateEnd: string | null
+  venue: string | null
+  danceStyles: Array<string> | null
+  status: 'cancelled' | 'confirmed' | 'planned' | 'sold-out'
+  bookingUrl: string | null
+}>
+
+// Source: sanity/lib/queries.ts
+// Variable: getEventQuery
+// Query: *[_type == "event" && slug.current == $slug][0] {      _id,  _type,  "title": coalesce(title, "Untitled event"),  "slug": slug.current,  excerpt,  coverImage,  dateStart,  dateEnd,  venue,  danceStyles,  status,  bookingUrl,    content[]{      ...,      markDefs[]{        ...,          _type == "link" => {    "page": page->slug.current,    "post": post->slug.current,    "event": event->slug.current  }      }    },    "pageBuilder": pageBuilder[]{      ...,      _type == "callToAction" => {        ...,        button {          ...,            link {      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current,    "event": event->slug.current  }      }        }      },      _type == "infoSection" => {        content[]{          ...,          markDefs[]{            ...,              _type == "link" => {    "page": page->slug.current,    "post": post->slug.current,    "event": event->slug.current  }          }        }      },    },  }
+export type GetEventQueryResult = {
+  _id: string
+  _type: 'event'
+  title: string
+  slug: string
+  excerpt: string | null
+  coverImage: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  } | null
+  dateStart: string
+  dateEnd: string | null
+  venue: string | null
+  danceStyles: Array<string> | null
+  status: 'cancelled' | 'confirmed' | 'planned' | 'sold-out'
+  bookingUrl: string | null
+  content: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: 'span'
+          _key: string
+        }>
+        style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+        listItem?: 'bullet' | 'number'
+        markDefs: Array<{
+          linkType?: 'href' | 'page' | 'post'
+          href?: string
+          page: string | null
+          post: string | null
+          openInNewTab?: boolean
+          _type: 'link'
+          _key: string
+          event: null
+        }> | null
+        level?: number
+        _type: 'block'
+        _key: string
+      }
+    | {
+        asset?: SanityImageAssetReference
+        media?: unknown
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        _type: 'image'
+        _key: string
+        markDefs: null
+      }
+  > | null
+  pageBuilder: Array<
+    | {
+        _key: string
+        _type: 'callToAction'
+        eyebrow?: string
+        heading: string
+        body?: BlockContentTextOnly
+        button: {
+          _type: 'button'
+          buttonText?: string
+          link: {
+            _type: 'link'
+            linkType?: 'event' | 'href' | 'page' | 'post'
+            href?: string
+            page: string | null
+            post: string | null
+            event: string | null
+            openInNewTab?: boolean
+          } | null
+        } | null
+        image?: {
+          asset?: SanityImageAssetReference
+          media?: unknown
+          hotspot?: SanityImageHotspot
+          crop?: SanityImageCrop
+          _type: 'image'
+        }
+        theme?: 'dark' | 'light'
+        contentAlignment?: 'imageFirst' | 'textFirst'
+      }
+    | {
+        _key: string
+        _type: 'infoSection'
+        heading?: string
+        subheading?: string
+        content: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>
+                text?: string
+                _type: 'span'
+                _key: string
+              }>
+              style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+              listItem?: 'bullet' | 'number'
+              markDefs: Array<{
+                linkType?: 'href' | 'page' | 'post'
+                href?: string
+                page: string | null
+                post: string | null
+                openInNewTab?: boolean
+                _type: 'link'
+                _key: string
+                event: null
+              }> | null
+              level?: number
+              _type: 'block'
+              _key: string
+            }
+          | {
+              asset?: SanityImageAssetReference
+              media?: unknown
+              hotspot?: SanityImageHotspot
+              crop?: SanityImageCrop
+              _type: 'image'
+              _key: string
+              markDefs: null
+            }
+        > | null
+      }
+  > | null
+} | null
+
+// Source: sanity/lib/queries.ts
+// Variable: eventsSlugs
+// Query: *[_type == "event" && defined(slug.current)]  {"slug": slug.current}
+export type EventsSlugsResult = Array<{
+  slug: string
+}>
+
+// Source: sanity/lib/queries.ts
+// Variable: nextEventQuery
+// Query: *[_type == "event" && defined(slug.current) && status != "cancelled" && dateStart >= now()] | order(dateStart asc) [0] {      _id,  _type,  "title": coalesce(title, "Untitled event"),  "slug": slug.current,  excerpt,  coverImage,  dateStart,  dateEnd,  venue,  danceStyles,  status,  bookingUrl,  }
+export type NextEventQueryResult = {
+  _id: string
+  _type: 'event'
+  title: string
+  slug: string
+  excerpt: string | null
+  coverImage: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  } | null
+  dateStart: string
+  dateEnd: string | null
+  venue: string | null
+  danceStyles: Array<string> | null
+  status: 'cancelled' | 'confirmed' | 'planned' | 'sold-out'
+  bookingUrl: string | null
+} | null
+
 // Query TypeMap
 import '@sanity/client'
 declare module '@sanity/client' {
   interface SanityQueries {
-    '*[_type == "settings"][0]': SettingsQueryResult
-    '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    heading,\n    subheading,\n    "pageBuilder": pageBuilder[]{\n      ...,\n      _type == "callToAction" => {\n        ...,\n        button {\n          ...,\n          \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n\n        }\n      },\n      _type == "infoSection" => {\n        content[]{\n          ...,\n          markDefs[]{\n            ...,\n            \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n          }\n        }\n      },\n    },\n  }\n': GetPageQueryResult
-    '\n  *[_type == "page" || _type == "post" && defined(slug.current)] | order(_type asc) {\n    "slug": slug.current,\n    _type,\n    _updatedAt,\n  }\n': SitemapDataResult
+    '*[_type == "settings"][0]{\n  ...,\n  navigation[]{\n    ...,\n    link {\n      ...,\n      "page": page->slug.current,\n      "post": post->slug.current,\n      "event": event->slug.current\n    }\n  }\n}': SettingsQueryResult
+    '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    heading,\n    subheading,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current,\n    "event": event->slug.current\n  }\n\n      }\n    },\n    "pageBuilder": pageBuilder[]{\n      ...,\n      _type == "callToAction" => {\n        ...,\n        button {\n          ...,\n          \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current,\n    "event": event->slug.current\n  }\n\n      }\n\n        }\n      },\n      _type == "infoSection" => {\n        content[]{\n          ...,\n          markDefs[]{\n            ...,\n            \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current,\n    "event": event->slug.current\n  }\n\n          }\n        }\n      },\n    },\n  }\n': GetPageQueryResult
+    '\n  *[(_type == "page" || _type == "post" || _type == "event") && defined(slug.current)] | order(_type asc) {\n    "slug": slug.current,\n    _type,\n    _updatedAt,\n  }\n': SitemapDataResult
     '\n  *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': AllPostsQueryResult
     '\n  *[_type == "post" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': MorePostsQueryResult
-    '\n  *[_type == "post" && slug.current == $slug] [0] {\n    content[]{\n    ...,\n    markDefs[]{\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n    }\n  },\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': PostQueryResult
+    '\n  *[_type == "post" && slug.current == $slug] [0] {\n    content[]{\n    ...,\n    markDefs[]{\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current,\n    "event": event->slug.current\n  }\n\n    }\n  },\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': PostQueryResult
     '\n  *[_type == "post" && defined(slug.current)]\n  {"slug": slug.current}\n': PostPagesSlugsResult
     '\n  *[_type == "page" && defined(slug.current)]\n  {"slug": slug.current}\n': PagesSlugsResult
+    '\n  *[_type == "event" && defined(slug.current)] | order(dateStart asc) {\n    \n  _id,\n  _type,\n  "title": coalesce(title, "Untitled event"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  dateStart,\n  dateEnd,\n  venue,\n  danceStyles,\n  status,\n  bookingUrl,\n\n  }\n': AllEventsQueryResult
+    '\n  *[_type == "event" && slug.current == $slug][0] {\n    \n  _id,\n  _type,\n  "title": coalesce(title, "Untitled event"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  dateStart,\n  dateEnd,\n  venue,\n  danceStyles,\n  status,\n  bookingUrl,\n\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current,\n    "event": event->slug.current\n  }\n\n      }\n    },\n    "pageBuilder": pageBuilder[]{\n      ...,\n      _type == "callToAction" => {\n        ...,\n        button {\n          ...,\n          \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current,\n    "event": event->slug.current\n  }\n\n      }\n\n        }\n      },\n      _type == "infoSection" => {\n        content[]{\n          ...,\n          markDefs[]{\n            ...,\n            \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current,\n    "event": event->slug.current\n  }\n\n          }\n        }\n      },\n    },\n  }\n': GetEventQueryResult
+    '\n  *[_type == "event" && defined(slug.current)]\n  {"slug": slug.current}\n': EventsSlugsResult
+    '\n  *[_type == "event" && defined(slug.current) && status != "cancelled" && dateStart >= now()] | order(dateStart asc) [0] {\n    \n  _id,\n  _type,\n  "title": coalesce(title, "Untitled event"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  dateStart,\n  dateEnd,\n  venue,\n  danceStyles,\n  status,\n  bookingUrl,\n\n  }\n': NextEventQueryResult
   }
 }

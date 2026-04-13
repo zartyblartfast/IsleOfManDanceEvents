@@ -1,7 +1,9 @@
 import type {Metadata} from 'next'
-import Head from 'next/head'
+import {type PortableTextBlock} from 'next-sanity'
 
 import PageBuilderPage from '@/app/components/PageBuilder'
+import PortableText from '@/app/components/PortableText'
+import {Section} from '@/app/components/Section'
 import {sanityFetch} from '@/sanity/lib/live'
 import {getPageQuery, pagesSlugs} from '@/sanity/lib/queries'
 import {GetPageQueryResult} from '@/sanity.types'
@@ -57,23 +59,25 @@ export default async function Page(props: Props) {
   }
 
   return (
-    <div className="my-12 lg:my-24">
-      <Head>
-        <title>{page.heading}</title>
-      </Head>
-      <div className="">
-        <div className="container">
-          <div className="pb-6 border-b border-gray-100">
-            <div className="max-w-3xl">
-              <h1 className="text-4xl text-gray-900 sm:text-5xl lg:text-7xl">{page.heading}</h1>
-              <p className="mt-4 text-base lg:text-lg leading-relaxed text-gray-600 uppercase font-light">
-                {page.subheading}
-              </p>
-            </div>
+    <div className="border-t border-brand/5 bg-cream">
+      <Section as="div" className={page.pageBuilder?.length ? 'pb-0' : ''}>
+        <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-ink mb-4 font-[family-name:var(--font-fraunces)]">
+          {page.heading}
+        </h1>
+        {page.subheading && (
+          <p className="text-lg text-ink-muted font-light leading-relaxed">
+            {page.subheading}
+          </p>
+        )}
+        {page.content && page.content.length > 0 && (
+          <div className="prose prose-lg prose-headings:font-[family-name:var(--font-fraunces)] prose-headings:text-ink prose-p:text-ink-muted prose-p:font-light prose-a:text-brand prose-a:underline-offset-4 hover:prose-a:text-brand-deep prose-strong:text-ink max-w-none mt-8">
+            <PortableText value={page.content as PortableTextBlock[]} />
           </div>
-        </div>
-      </div>
-      <PageBuilderPage page={page as GetPageQueryResult} />
+        )}
+      </Section>
+      {page.pageBuilder && page.pageBuilder.length > 0 && (
+        <PageBuilderPage page={page as GetPageQueryResult} />
+      )}
     </div>
   )
 }

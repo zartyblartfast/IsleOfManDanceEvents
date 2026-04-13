@@ -38,6 +38,8 @@ function resolveHref(documentType?: string, slug?: string): string | undefined {
       return slug ? `/posts/${slug}` : undefined
     case 'page':
       return slug ? `/${slug}` : undefined
+    case 'event':
+      return slug ? `/events/${slug}` : undefined
     default:
       console.warn('Invalid document type:', documentType)
       return undefined
@@ -47,7 +49,7 @@ function resolveHref(documentType?: string, slug?: string): string | undefined {
 // Main Sanity configuration
 export default defineConfig({
   name: 'default',
-  title: 'Sanity + Next.js Starter Template',
+  title: 'IoM Dance Studio',
 
   projectId,
   dataset,
@@ -75,6 +77,10 @@ export default defineConfig({
           {
             route: '/posts/:slug',
             filter: `_type == "post" && slug.current == $slug || _id == $slug`,
+          },
+          {
+            route: '/events/:slug',
+            filter: `_type == "event" && slug.current == $slug || _id == $slug`,
           },
         ]),
         // Locations Resolver API allows you to define where data is being used in your application. https://www.sanity.io/docs/visual-editing/presentation-resolver-api#8d8bca7bfcd7
@@ -112,6 +118,24 @@ export default defineConfig({
                 {
                   title: 'Home',
                   href: '/',
+                } satisfies DocumentLocation,
+              ].filter(Boolean) as DocumentLocation[],
+            }),
+          }),
+          event: defineLocations({
+            select: {
+              title: 'title',
+              slug: 'slug.current',
+            },
+            resolve: (doc) => ({
+              locations: [
+                {
+                  title: doc?.title || 'Untitled event',
+                  href: resolveHref('event', doc?.slug)!,
+                },
+                {
+                  title: 'Events',
+                  href: '/events',
                 } satisfies DocumentLocation,
               ].filter(Boolean) as DocumentLocation[],
             }),

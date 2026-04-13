@@ -1,6 +1,6 @@
 import {UserIcon} from '@sanity/icons'
 import {defineField, defineType} from 'sanity'
-import type {Person} from '../../../sanity.types'
+import {imageWithAlt} from '../helpers'
 
 /**
  * Person schema.  Define and edit the fields for the 'person' content type.
@@ -25,36 +25,10 @@ export const person = defineType({
       type: 'string',
       validation: (rule) => rule.required(),
     }),
-    defineField({
-      name: 'picture',
-      title: 'Picture',
-      type: 'image',
-      fields: [
-        defineField({
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative text',
-          description: 'Important for SEO and accessibility.',
-          validation: (rule) => {
-            // Custom validation to ensure alt text is provided if the image is present. https://www.sanity.io/docs/validation
-            return rule.custom((alt, context) => {
-              const document = context.document as Person
-              if (document?.picture?.asset?._ref && !alt) {
-                return 'Required'
-              }
-              return true
-            })
-          },
-        }),
-      ],
-      options: {
-        hotspot: true,
-        aiAssist: {
-          imageDescriptionField: 'alt',
-        },
-      },
+    {
+      ...imageWithAlt('picture', 'Picture'),
       validation: (rule) => rule.required(),
-    }),
+    },
   ],
   // List preview configuration. https://www.sanity.io/docs/previews-list-views
   preview: {

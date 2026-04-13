@@ -116,6 +116,35 @@ export const settings = defineType({
       ],
     }),
     defineField({
+      name: 'navigation',
+      title: 'Main Navigation',
+      description: 'Links shown in the site header. The last item is styled as the primary CTA button.',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'navItem',
+          title: 'Nav Item',
+          fields: [
+            defineField({
+              name: 'label',
+              title: 'Label',
+              type: 'string',
+              validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: 'link',
+              title: 'Link',
+              type: 'link',
+            }),
+          ],
+          preview: {
+            select: {title: 'label'},
+          },
+        }),
+      ],
+    }),
+    defineField({
       name: 'ogImage',
       title: 'Open Graph Image',
       type: 'image',

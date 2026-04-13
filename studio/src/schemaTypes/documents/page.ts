@@ -1,5 +1,6 @@
 import {defineField, defineType} from 'sanity'
 import {DocumentIcon} from '@sanity/icons'
+import {titleField, slugField, pageBuilderField} from '../helpers'
 
 /**
  * Page schema.  Define and edit the fields for the 'page' content type.
@@ -12,23 +13,8 @@ export const page = defineType({
   type: 'document',
   icon: DocumentIcon,
   fields: [
-    defineField({
-      name: 'name',
-      title: 'Name',
-      type: 'string',
-      validation: (Rule) => Rule.required(),
-    }),
-
-    defineField({
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
-      validation: (Rule) => Rule.required(),
-      options: {
-        source: 'name',
-        maxLength: 96,
-      },
-    }),
+    titleField('name', 'Name'),
+    slugField('name'),
     defineField({
       name: 'heading',
       title: 'Heading',
@@ -41,22 +27,11 @@ export const page = defineType({
       type: 'string',
     }),
     defineField({
-      name: 'pageBuilder',
-      title: 'Page builder',
-      type: 'array',
-      of: [{type: 'callToAction'}, {type: 'infoSection'}],
-      options: {
-        insertMenu: {
-          // Configure the "Add Item" menu to display a thumbnail preview of the content type. https://www.sanity.io/docs/studio/array-type#efb1fe03459d
-          views: [
-            {
-              name: 'grid',
-              previewImageUrl: (schemaTypeName) =>
-                `/static/page-builder-thumbnails/${schemaTypeName}.webp`,
-            },
-          ],
-        },
-      },
+      name: 'content',
+      title: 'Content',
+      description: 'Optional body text shown directly below the heading. For richer layouts, use the Page Builder instead.',
+      type: 'blockContent',
     }),
+    pageBuilderField(),
   ],
 })

@@ -1,7 +1,44 @@
+import {format, parseISO} from 'date-fns'
+
 import {CtaLink} from '@/app/components/CtaLink'
 import {SiteLogo} from '@/app/components/SiteLogo'
+import {Section} from '@/app/components/Section'
+import {sanityFetch} from '@/sanity/lib/live'
+import {nextEventQuery} from '@/sanity/lib/queries'
+import {NextEventQueryResult} from '@/sanity.types'
 
-export default function Page() {
+/** Renders the featured-event card when a next event exists in Sanity. */
+function FeaturedEvent({event}: {event: NonNullable<NextEventQueryResult>}) {
+  const dateLabel = event.dateStart
+    ? format(parseISO(event.dateStart), 'd MMM yyyy')
+    : null
+
+  return (
+    <section
+      id="featured-event"
+      className="scroll-mt-28 rounded-2xl border border-brand/15 bg-white p-8 sm:p-10 shadow-[var(--shadow-card)] ring-1 ring-brand/5"
+    >
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand mb-3">
+        Featured event
+      </p>
+      <h2 className="text-2xl sm:text-3xl text-ink mb-2">{event.title}</h2>
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-ink-muted mb-4">
+        {dateLabel && <span>{dateLabel}</span>}
+        {event.venue && <span>📍 {event.venue}</span>}
+      </div>
+      {event.excerpt && (
+        <p className="text-ink-muted font-light leading-relaxed mb-8 max-w-2xl">
+          {event.excerpt}
+        </p>
+      )}
+      <CtaLink href={`/events/${event.slug}`}>Event details</CtaLink>
+    </section>
+  )
+}
+
+export default async function Page() {
+  const {data: nextEvent} = await sanityFetch({query: nextEventQuery})
+
   return (
     <div className="relative">
       {/* Hero — CSS-only; swap in photography later */}
@@ -36,7 +73,7 @@ export default function Page() {
             </div>
           </div>
 
-          {/* Photo placeholder — replace with &lt;Image /&gt; when you have assets */}
+          {/* Photo placeholder — replace with <Image /> when you have assets */}
           <div className="mx-auto mt-16 max-w-4xl photo-placeholder aspect-[21/9] sm:aspect-[2.4/1] flex flex-col items-center justify-center gap-2 px-6 text-center">
             <span className="text-xs font-medium uppercase tracking-widest text-brand/50">
               Photography
@@ -50,7 +87,7 @@ export default function Page() {
       </section>
 
       <div className="border-t border-brand/10 bg-cream">
-        <div className="container max-w-3xl px-4 py-16 sm:py-24 space-y-20 lg:max-w-4xl">
+        <Section as="div" className="space-y-20">
           <section className="space-y-4">
             <h2 className="text-3xl sm:text-4xl text-ink">Welcome to IoM Dance</h2>
             <p className="text-lg text-ink-muted font-light leading-relaxed">
@@ -60,21 +97,9 @@ export default function Page() {
             </p>
           </section>
 
-          <section
-            id="featured-event"
-            className="scroll-mt-28 rounded-2xl border border-brand/15 bg-white p-8 sm:p-10 shadow-[var(--shadow-card)] ring-1 ring-brand/5"
-          >
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand mb-3">
-              Featured
-            </p>
-            <h2 className="text-2xl sm:text-3xl text-ink mb-2">Port Erin Modern Jive &amp; Tango Weekend</h2>
-            <p className="text-ink-muted font-light leading-relaxed mb-8 max-w-2xl">
-              A planned weekend combining separate Modern Jive and Tango sessions, social dancing,
-              travel advice and accommodation information in one of the Isle of Man&apos;s most scenic
-              locations.
-            </p>
-            <CtaLink href="/events/port-erin-weekend">Event details</CtaLink>
-          </section>
+          {nextEvent ? (
+            <FeaturedEvent event={nextEvent} />
+          ) : null}
 
           <section className="space-y-4">
             <h2 className="text-3xl sm:text-4xl text-ink">Planning your visit</h2>
@@ -92,7 +117,7 @@ export default function Page() {
             </p>
             <CtaLink href="/contact">Contact us</CtaLink>
           </section>
-        </div>
+        </Section>
       </div>
     </div>
   )

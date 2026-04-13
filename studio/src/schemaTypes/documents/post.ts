@@ -1,7 +1,7 @@
 import {DocumentTextIcon} from '@sanity/icons'
 import {format, parseISO} from 'date-fns'
 import {defineField, defineType} from 'sanity'
-import type {Post} from '../../../sanity.types'
+import {titleField, slugField, imageWithAlt, excerptField} from '../helpers'
 
 /**
  * Post schema.  Define and edit the fields for the 'post' content type.
@@ -14,63 +14,15 @@ export const post = defineType({
   icon: DocumentTextIcon,
   type: 'document',
   fields: [
-    defineField({
-      name: 'title',
-      title: 'Title',
-      type: 'string',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
-      description: 'A slug is required for the post to show up in the preview',
-      options: {
-        source: 'title',
-        maxLength: 96,
-        isUnique: (value, context) => context.defaultIsUnique(value, context),
-      },
-      validation: (rule) => rule.required(),
-    }),
+    titleField(),
+    slugField('title'),
     defineField({
       name: 'content',
       title: 'Content',
       type: 'blockContent',
     }),
-    defineField({
-      name: 'excerpt',
-      title: 'Excerpt',
-      type: 'text',
-    }),
-    defineField({
-      name: 'coverImage',
-      title: 'Cover Image',
-      type: 'image',
-      options: {
-        hotspot: true,
-        aiAssist: {
-          imageDescriptionField: 'alt',
-        },
-      },
-      fields: [
-        {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative text',
-          description: 'Important for SEO and accessibility.',
-          validation: (rule) => {
-            // Custom validation to ensure alt text is provided if the image is present. https://www.sanity.io/docs/validation
-            return rule.custom((alt, context) => {
-              const document = context.document as Post
-              if (document?.coverImage?.asset?._ref && !alt) {
-                return 'Required'
-              }
-              return true
-            })
-          },
-        },
-      ],
-    }),
+    excerptField(),
+    imageWithAlt('coverImage', 'Cover Image'),
     defineField({
       name: 'date',
       title: 'Date',

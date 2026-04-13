@@ -75,7 +75,9 @@
   }
 }
 
-/* Hero mesh — pure CSS, replace later with photography */
+/* Hero mesh — pure CSS, replace later with photography.
+   The dot pattern and colour gradients are composited into a single background-image
+   so both layers render when the element carries both classes. */
 .hero-mesh {
   background-color: var(--color-cream);
   background-image:
@@ -85,8 +87,12 @@
 }
 
 .hero-pattern {
-  background-image: radial-gradient(circle at center, rgba(112, 64, 140, 0.08) 1px, transparent 1px);
-  background-size: 22px 22px;
+  background-image:
+    radial-gradient(circle at center, rgba(112, 64, 140, 0.08) 1px, transparent 1px),
+    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(40, 171, 163, 0.2), transparent 50%),
+    radial-gradient(ellipse 80% 60% at 100% 50%, rgba(112, 64, 140, 0.12), transparent 45%),
+    radial-gradient(ellipse 70% 50% at 0% 80%, rgba(245, 151, 30, 0.11), transparent 40%);
+  background-size: 22px 22px, auto, auto, auto;
 }
 
 .photo-placeholder {

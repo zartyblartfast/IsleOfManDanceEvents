@@ -1,3 +1,5 @@
+import {Section} from '@/app/components/Section'
+
 /**
  * Shared layout for marketing-style pages — matches the Events page shell (container + readable column).
  */
@@ -6,17 +8,20 @@ export function PageLayout({
   description,
   eyebrow,
   children,
+  prose = true,
 }: {
   title: string
   description?: string
   /** Optional label above the title (same style as Events “What’s on”). */
   eyebrow?: string
   children?: React.ReactNode
+  /** Wrap children in a prose container (default true). Set false for custom layouts like post lists. */
+  prose?: boolean
 }) {
   return (
     <div className="border-t border-brand/5 bg-cream">
-      <div className="container px-4 py-16 sm:py-20">
-        <div className="max-w-3xl mb-12 lg:max-w-4xl">
+      <Section as="div">
+        <div className="mb-12">
           {eyebrow ? (
             <p className="text-xs font-medium uppercase tracking-[0.2em] text-brand mb-3">{eyebrow}</p>
           ) : null}
@@ -28,13 +33,15 @@ export function PageLayout({
           ) : null}
         </div>
         {children ? (
-          <div className="max-w-3xl lg:max-w-4xl">
+          prose ? (
             <div className="prose prose-lg prose-headings:font-[family-name:var(--font-fraunces)] prose-headings:text-ink prose-p:text-ink-muted prose-p:font-light prose-a:text-brand prose-a:underline-offset-4 hover:prose-a:text-brand-deep prose-strong:text-ink max-w-none">
               {children}
             </div>
-          </div>
+          ) : (
+            children
+          )
         ) : null}
-      </div>
+      </Section>
     </div>
   )
 }

@@ -2,14 +2,42 @@ import Link from 'next/link'
 import {SiteLogo} from '@/app/components/SiteLogo'
 import {settingsQuery} from '@/sanity/lib/queries'
 import {sanityFetch} from '@/sanity/lib/live'
+import {linkResolver} from '@/sanity/lib/utils'
+import {DereferencedLink} from '@/sanity/lib/types'
 
 const navLinkClass =
   'text-ink/75 hover:text-brand font-medium text-sm transition-colors duration-200 hover:underline underline-offset-4 decoration-brand/40'
+
+const ctaClass =
+  'rounded-full inline-flex items-center bg-brand hover:bg-brand-deep py-2 px-3 sm:px-5 text-white text-sm font-medium shadow-sm transition-colors duration-200'
+
+/** Fallback nav used when settings.navigation is not yet configured. */
+const defaultNav = [
+  {label: 'Home', href: '/'},
+  {label: 'About', href: '/about'},
+  {label: 'Events', href: '/events'},
+  {label: 'Travel', href: '/travel'},
+  {label: 'Accommodation', href: '/accommodation'},
+  {label: 'Contact', href: '/contact'},
+]
 
 export default async function Header() {
   const {data: settings} = await sanityFetch({
     query: settingsQuery,
   })
+
+  const cmsNav = settings?.navigation
+  const hasCmsNav = cmsNav && cmsNav.length > 0
+
+  // Resolve CMS nav items to {label, href} pairs
+  const navItems = hasCmsNav
+    ? cmsNav
+        .map((item) => ({
+          label: item.label ?? '',
+          href: linkResolver(item.link as DereferencedLink) ?? '#',
+        }))
+        .filter((item) => item.label)
+    : defaultNav
 
   return (
     <header className="fixed z-50 h-20 sm:h-24 inset-0 flex items-center border-b border-brand/10 bg-cream/85 backdrop-blur-md">
@@ -34,39 +62,19 @@ export default async function Header() {
               role="list"
               className="flex flex-wrap items-center justify-end gap-x-2 sm:gap-x-4 gap-y-2 text-xs sm:text-sm"
             >
-              <li>
-                <Link href="/" className={navLinkClass}>
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className={navLinkClass}>
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link href="/events" className={navLinkClass}>
-                  Events
-                </Link>
-              </li>
-              <li>
-                <Link href="/travel" className={navLinkClass}>
-                  Travel
-                </Link>
-              </li>
-              <li>
-                <Link href="/accommodation" className={navLinkClass}>
-                  Accommodation
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="rounded-full inline-flex items-center bg-brand hover:bg-brand-deep py-2 px-3 sm:px-5 text-white text-sm font-medium shadow-sm transition-colors duration-200"
-                  href="/contact"
-                >
-                  Contact
-                </Link>
-              </li>
+              {navItems.map((item, i) => {
+                const isLast = i === navItems.length - 1
+                return (
+                  <li key={item.label}>
+                    <Link
+                      href={item.href}
+                      className={isLast ? ctaClass : navLinkClass}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                )
+              })}
             </ul>
           </nav>
         </div>

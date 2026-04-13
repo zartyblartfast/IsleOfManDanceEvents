@@ -21,7 +21,7 @@ export function resolveOpenGraphImage(
   height = 627,
 ) {
   if (!image) return
-  const url = urlForImage(image)?.width(1200).height(627).fit('crop').url()
+  const url = urlForImage(image)?.width(width).height(height).fit('crop').url()
   if (!url) return
   return {url, alt: (image as {alt?: string})?.alt || '', width, height}
 }
@@ -42,10 +42,17 @@ export function linkResolver(link: Link | DereferencedLink | undefined) {
       if (link?.page && typeof link.page === 'string') {
         return `/${link.page}`
       }
+      return null
     case 'post':
       if (link?.post && typeof link.post === 'string') {
         return `/posts/${link.post}`
       }
+      return null
+    case 'event':
+      if (link?.event && typeof link.event === 'string') {
+        return `/events/${link.event}`
+      }
+      return null
     default:
       return null
   }
