@@ -11,19 +11,11 @@ function assertValue<T>(v: T | undefined, errorMessage: string): T {
   return v
 }
 
-/** Trim and strip accidental wrapping quotes from Vercel / copy-paste. */
-function envString(name: string): string | undefined {
-  const v = process.env[name]
-  if (v == null || v === '') return undefined
-  const t = v.replace(/^["']|["']$/g, '').trim()
-  return t === '' ? undefined : t
-}
-
-/** Prefer setting `NEXT_PUBLIC_SANITY_DATASET` in Vercel; defaults match this project’s dataset. */
-export const dataset = envString('NEXT_PUBLIC_SANITY_DATASET') ?? 'production'
+/** Prefer setting `NEXT_PUBLIC_SANITY_DATASET` in Vercel; defaults match this project's dataset. */
+export const dataset = (process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production').replace(/^["']|["']$/g, '').trim()
 
 export const projectId = assertValue(
-  envString('NEXT_PUBLIC_SANITY_PROJECT_ID'),
+  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID?.replace(/^["']|["']$/g, '').trim(),
   'Missing environment variable: NEXT_PUBLIC_SANITY_PROJECT_ID',
 )
 
