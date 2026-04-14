@@ -1,11 +1,45 @@
 import Link from 'next/link'
 
 import {SiteLogo} from '@/app/components/SiteLogo'
+import {settingsQuery} from '@/sanity/lib/queries'
+import {sanityFetch} from '@/sanity/lib/live'
+import {linkResolver} from '@/sanity/lib/utils'
+import {DereferencedLink} from '@/sanity/lib/types'
 
-const link =
+const linkClass =
   'text-cream/80 hover:text-white text-sm transition-colors duration-200 underline-offset-4 hover:underline'
 
-export default function Footer() {
+/** Fallback nav used when settings.navigation is not yet configured. */
+const defaultNav = [
+  {label: 'Home', href: '/'},
+  {label: 'About', href: '/about'},
+  {label: 'Events', href: '/events'},
+  {label: 'Travel', href: '/travel'},
+  {label: 'Accommodation', href: '/accommodation'},
+  {label: 'Contact', href: '/contact'},
+]
+
+const defaultFooterText =
+  'Social dance weekends and events — Modern Jive, Tango and more. All welcome, local or visiting from across the UK and Ireland.'
+
+export default async function Footer() {
+  const {data: settings} = await sanityFetch({query: settingsQuery})
+
+  const siteTitle = settings?.title || 'IoM Dance'
+  const footerText = settings?.footerText || defaultFooterText
+
+  const cmsNav = settings?.navigation
+  const hasCmsNav = cmsNav && cmsNav.length > 0
+
+  const navItems = hasCmsNav
+    ? cmsNav
+        .map((item) => ({
+          label: item.label ?? '',
+          href: linkResolver(item.link as DereferencedLink) ?? '#',
+        }))
+        .filter((item) => item.label)
+    : defaultNav
+
   return (
     <footer className="relative mt-auto border-t border-white/10 bg-ink text-cream">
       <div
@@ -23,41 +57,27 @@ export default function Footer() {
               <div className="space-y-3 min-w-0">
                 <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">Isle of Man</p>
                 <h3 className="text-2xl sm:text-3xl font-semibold leading-tight font-[family-name:var(--font-fraunces)] text-white">
-                  IoM Dance
+                  {siteTitle}
                 </h3>
               </div>
             </div>
             <p className="text-cream/75 font-light text-sm leading-relaxed">
-              Social dance weekends and events — Modern Jive, Tango and more. All welcome, local or
-              visiting from across the UK and Ireland.
+              {footerText}
             </p>
           </div>
           <nav
             aria-label="Footer"
             className="flex flex-wrap gap-x-8 gap-y-3 justify-center lg:justify-end text-sm"
           >
-            <Link href="/" className={link}>
-              Home
-            </Link>
-            <Link href="/about" className={link}>
-              About
-            </Link>
-            <Link href="/events" className={link}>
-              Events
-            </Link>
-            <Link href="/travel" className={link}>
-              Travel
-            </Link>
-            <Link href="/accommodation" className={link}>
-              Accommodation
-            </Link>
-            <Link href="/contact" className={link}>
-              Contact
-            </Link>
+            {navItems.map((item) => (
+              <Link key={item.label} href={item.href} className={linkClass}>
+                {item.label}
+              </Link>
+            ))}
           </nav>
         </div>
         <p className="text-center lg:text-left pb-8 text-xs text-cream/45">
-          © {new Date().getFullYear()} IoM Dance · Isle of Man
+          © {new Date().getFullYear()} {siteTitle} · Isle of Man
         </p>
       </div>
     </footer>

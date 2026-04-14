@@ -226,6 +226,7 @@ export type Settings = {
     _type: 'navItem'
     _key: string
   }>
+  footerText?: string
   ogImage?: {
     asset?: SanityImageAssetReference
     media?: unknown
@@ -627,6 +628,7 @@ export type SettingsQueryResult = {
     _type: 'navItem'
     _key: string
   }> | null
+  footerText?: string
   ogImage?: {
     asset?: SanityImageAssetReference
     media?: unknown

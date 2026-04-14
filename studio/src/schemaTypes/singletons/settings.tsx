@@ -145,6 +145,14 @@ export const settings = defineType({
       ],
     }),
     defineField({
+      name: 'footerText',
+      title: 'Footer Text',
+      description: 'Short description shown in the site footer.',
+      type: 'string',
+      initialValue:
+        'Social dance weekends and events — Modern Jive, Tango and more. All welcome, local or visiting from across the UK and Ireland.',
+    }),
+    defineField({
       name: 'ogImage',
       title: 'Open Graph Image',
       type: 'image',
