@@ -306,6 +306,35 @@ export type Person = {
   }
 }
 
+export type Homepage = {
+  _id: string
+  _type: 'homepage'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  heroTagline?: string
+  heroHeading: string
+  heroDescription?: string
+  heroPrimaryCta?: {
+    label?: string
+    href?: string
+  }
+  heroSecondaryCta?: {
+    label?: string
+    href?: string
+  }
+  welcomeHeading?: string
+  welcomeText?: string
+  planningHeading?: string
+  planningText?: string
+  ctaHeading?: string
+  ctaText?: string
+  ctaButton?: {
+    label?: string
+    href?: string
+  }
+}
+
 export type SanityAssistInstructionTask = {
   _type: 'sanity.assist.instructionTask'
   path?: string
@@ -560,6 +589,7 @@ export type AllSanitySchemaTypes =
   | PersonReference
   | Post
   | Person
+  | Homepage
   | SanityAssistInstructionTask
   | SanityAssistTaskStatus
   | SanityAssistSchemaTypeAnnotations
@@ -581,6 +611,33 @@ export type AllSanitySchemaTypes =
   | SanityAssetSourceData
   | SanityImageAsset
   | Geopoint
+
+// Source: sanity/lib/queries.ts
+// Variable: homepageQuery
+// Query: *[_type == "homepage" && _id == "homepage"][0]{  heroTagline,  heroHeading,  heroDescription,  heroPrimaryCta,  heroSecondaryCta,  welcomeHeading,  welcomeText,  planningHeading,  planningText,  ctaHeading,  ctaText,  ctaButton}
+export type HomepageQueryResult = {
+  heroTagline: string | null
+  heroHeading: string
+  heroDescription: string | null
+  heroPrimaryCta: {
+    label?: string
+    href?: string
+  } | null
+  heroSecondaryCta: {
+    label?: string
+    href?: string
+  } | null
+  welcomeHeading: string | null
+  welcomeText: string | null
+  planningHeading: string | null
+  planningText: string | null
+  ctaHeading: string | null
+  ctaText: string | null
+  ctaButton: {
+    label?: string
+    href?: string
+  } | null
+} | null
 
 // Source: sanity/lib/queries.ts
 // Variable: settingsQuery
@@ -1113,6 +1170,7 @@ export type NextEventQueryResult = {
 import '@sanity/client'
 declare module '@sanity/client' {
   interface SanityQueries {
+    '*[_type == "homepage" && _id == "homepage"][0]{\n  heroTagline,\n  heroHeading,\n  heroDescription,\n  heroPrimaryCta,\n  heroSecondaryCta,\n  welcomeHeading,\n  welcomeText,\n  planningHeading,\n  planningText,\n  ctaHeading,\n  ctaText,\n  ctaButton\n}': HomepageQueryResult
     '*[_type == "settings"][0]{\n  ...,\n  navigation[]{\n    ...,\n    link {\n      ...,\n      "page": page->slug.current,\n      "post": post->slug.current,\n      "event": event->slug.current\n    }\n  }\n}': SettingsQueryResult
     '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    heading,\n    subheading,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current,\n    "event": event->slug.current\n  }\n\n      }\n    },\n    "pageBuilder": pageBuilder[]{\n      ...,\n      _type == "callToAction" => {\n        ...,\n        button {\n          ...,\n          \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current,\n    "event": event->slug.current\n  }\n\n      }\n\n        }\n      },\n      _type == "infoSection" => {\n        content[]{\n          ...,\n          markDefs[]{\n            ...,\n            \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current,\n    "event": event->slug.current\n  }\n\n          }\n        }\n      },\n    },\n  }\n': GetPageQueryResult
     '\n  *[(_type == "page" || _type == "post" || _type == "event") && defined(slug.current)] | order(_type asc) {\n    "slug": slug.current,\n    _type,\n    _updatedAt,\n  }\n': SitemapDataResult

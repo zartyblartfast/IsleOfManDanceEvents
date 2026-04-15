@@ -1,5 +1,20 @@
 import {defineQuery} from 'next-sanity'
 
+export const homepageQuery = defineQuery(`*[_type == "homepage" && _id == "homepage"][0]{
+  heroTagline,
+  heroHeading,
+  heroDescription,
+  heroPrimaryCta,
+  heroSecondaryCta,
+  welcomeHeading,
+  welcomeText,
+  planningHeading,
+  planningText,
+  ctaHeading,
+  ctaText,
+  ctaButton
+}`)
+
 export const settingsQuery = defineQuery(`*[_type == "settings"][0]{
   ...,
   navigation[]{

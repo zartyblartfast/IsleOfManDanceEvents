@@ -5,7 +5,7 @@ import {CtaLink} from '@/app/components/CtaLink'
 import {SiteLogo} from '@/app/components/SiteLogo'
 import {Section} from '@/app/components/Section'
 import {sanityFetch} from '@/sanity/lib/live'
-import {nextEventQuery} from '@/sanity/lib/queries'
+import {homepageQuery, nextEventQuery} from '@/sanity/lib/queries'
 import {NextEventQueryResult} from '@/sanity.types'
 
 import heroImage from '@/public/images/IomDanceEvents_Hero_Image.jpg'
@@ -40,7 +40,41 @@ function FeaturedEvent({event}: {event: NonNullable<NextEventQueryResult>}) {
 }
 
 export default async function Page() {
-  const {data: nextEvent} = await sanityFetch({query: nextEventQuery})
+  const [{data: hp}, {data: nextEvent}] = await Promise.all([
+    sanityFetch({query: homepageQuery}),
+    sanityFetch({query: nextEventQuery}),
+  ])
+
+  // Fallbacks for when the Homepage singleton hasn't been published yet
+  const heroTagline = hp?.heroTagline ?? 'Isle of Man · Social dance'
+  const heroHeading = hp?.heroHeading ?? 'Dance weekends & social events in the Isle of Man'
+  const heroDescription =
+    hp?.heroDescription ??
+    'Modern Jive, Tango and social dance in beautiful venues — bringing together local dancers and visitors from across the UK & Ireland.'
+  const primaryCta = {
+    label: hp?.heroPrimaryCta?.label ?? 'View events',
+    href: hp?.heroPrimaryCta?.href ?? '/events',
+  }
+  const secondaryCta = {
+    label: hp?.heroSecondaryCta?.label ?? 'Travel information',
+    href: hp?.heroSecondaryCta?.href ?? '/travel',
+  }
+  const welcomeHeading = hp?.welcomeHeading ?? 'Welcome to IoM Dance'
+  const welcomeText =
+    hp?.welcomeText ??
+    'IoM Dance is a new event website for social dance weekends and special events in the Isle of Man. The aim is to create enjoyable, well-organised events that combine dancing, beautiful locations and a friendly atmosphere.'
+  const planningHeading = hp?.planningHeading ?? 'Planning your visit'
+  const planningText =
+    hp?.planningText ??
+    'Travel advice, ferry options, accommodation ideas and local information will be provided to help dancers visit the Isle of Man with confidence.'
+  const ctaHeading = hp?.ctaHeading ?? 'Interested in taking part?'
+  const ctaText =
+    hp?.ctaText ??
+    'Whether you are local to the Isle of Man or travelling from the UK or Ireland, we would love to hear from you.'
+  const ctaButton = {
+    label: hp?.ctaButton?.label ?? 'Contact us',
+    href: hp?.ctaButton?.href ?? '/contact',
+  }
 
   return (
     <div className="relative">
@@ -74,19 +108,18 @@ export default async function Page() {
                 />
               </div>
               <p className="text-xs sm:text-sm font-medium uppercase tracking-[0.25em] text-brand-muted">
-                Isle of Man · Social dance
+                {heroTagline}
               </p>
               <h1 className="text-3xl sm:text-4xl md:text-5xl leading-[1.1] text-balance text-white drop-shadow-lg">
-                Dance weekends & social events in the Isle of Man
+                {heroHeading}
               </h1>
               <p className="text-base sm:text-lg text-cream/85 font-light leading-relaxed">
-                Modern Jive, Tango and social dance in beautiful venues — bringing together local
-                dancers and visitors from across the UK & Ireland.
+                {heroDescription}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-end items-stretch sm:items-center pt-2">
-                <CtaLink href="/events">View events</CtaLink>
-                <CtaLink href="/travel" variant="secondary">
-                  Travel information
+                <CtaLink href={primaryCta.href}>{primaryCta.label}</CtaLink>
+                <CtaLink href={secondaryCta.href} variant="secondary">
+                  {secondaryCta.label}
                 </CtaLink>
               </div>
             </div>
@@ -97,11 +130,9 @@ export default async function Page() {
       <div className="border-t border-brand/10 bg-cream">
         <Section as="div" className="space-y-20">
           <section className="space-y-4">
-            <h2 className="text-3xl sm:text-4xl text-ink">Welcome to IoM Dance</h2>
+            <h2 className="text-3xl sm:text-4xl text-ink">{welcomeHeading}</h2>
             <p className="text-lg text-ink-muted font-light leading-relaxed">
-              IoM Dance is a new event website for social dance weekends and special events in the
-              Isle of Man. The aim is to create enjoyable, well-organised events that combine
-              dancing, beautiful locations and a friendly atmosphere.
+              {welcomeText}
             </p>
           </section>
 
@@ -110,20 +141,18 @@ export default async function Page() {
           ) : null}
 
           <section className="space-y-4">
-            <h2 className="text-3xl sm:text-4xl text-ink">Planning your visit</h2>
+            <h2 className="text-3xl sm:text-4xl text-ink">{planningHeading}</h2>
             <p className="text-lg text-ink-muted font-light leading-relaxed">
-              Travel advice, ferry options, accommodation ideas and local information will be
-              provided to help dancers visit the Isle of Man with confidence.
+              {planningText}
             </p>
           </section>
 
           <section className="space-y-6 border-t border-brand/10 pt-16">
-            <h2 className="text-3xl sm:text-4xl text-ink">Interested in taking part?</h2>
+            <h2 className="text-3xl sm:text-4xl text-ink">{ctaHeading}</h2>
             <p className="text-lg text-ink-muted font-light leading-relaxed">
-              Whether you are local to the Isle of Man or travelling from the UK or Ireland, we would
-              love to hear from you.
+              {ctaText}
             </p>
-            <CtaLink href="/contact">Contact us</CtaLink>
+            <CtaLink href={ctaButton.href}>{ctaButton.label}</CtaLink>
           </section>
         </Section>
       </div>
