@@ -1,4 +1,5 @@
 import {format, parseISO} from 'date-fns'
+import Image from 'next/image'
 
 import {CtaLink} from '@/app/components/CtaLink'
 import {SiteLogo} from '@/app/components/SiteLogo'
@@ -6,6 +7,8 @@ import {Section} from '@/app/components/Section'
 import {sanityFetch} from '@/sanity/lib/live'
 import {nextEventQuery} from '@/sanity/lib/queries'
 import {NextEventQueryResult} from '@/sanity.types'
+
+import heroImage from '@/public/images/IomDanceEvents_Hero_Image.jpg'
 
 /** Renders the featured-event card when a next event exists in Sanity. */
 function FeaturedEvent({event}: {event: NonNullable<NextEventQueryResult>}) {
@@ -41,47 +44,52 @@ export default async function Page() {
 
   return (
     <div className="relative">
-      {/* Hero — CSS-only; swap in photography later */}
-      <section className="relative hero-mesh hero-pattern overflow-hidden">
+      {/* Hero with background image */}
+      <section className="relative overflow-hidden bg-ink">
+        <Image
+          src={heroImage}
+          alt="Couples dancing at a social dance event with fairy lights and warm purple lighting"
+          fill
+          priority
+          placeholder="blur"
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        {/* Gradient overlays for text readability */}
         <div
-          className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-cream to-transparent pointer-events-none"
+          className="absolute inset-0 bg-gradient-to-r from-ink/40 via-ink/30 to-ink/70"
           aria-hidden
         />
-        <div className="container relative px-4 py-20 sm:py-28 lg:py-32">
-          <div className="mx-auto max-w-3xl text-center space-y-8 lg:max-w-4xl">
-            <div className="flex justify-center pt-2">
-              <SiteLogo
-                className="h-24 w-24 sm:h-32 sm:w-32 rounded-2xl shadow-[var(--shadow-card)] ring-1 ring-brand/20"
-                sizes="(max-width: 640px) 192px, 256px"
-              />
+        <div
+          className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-ink/80 to-transparent"
+          aria-hidden
+        />
+        <div className="container relative px-4 py-24 sm:py-32 lg:py-40">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-end">
+            <div className="max-w-xl space-y-6 text-center lg:text-right">
+              <div className="flex justify-center lg:justify-end">
+                <SiteLogo
+                  className="h-20 w-20 sm:h-24 sm:w-24 rounded-2xl shadow-lg ring-1 ring-white/20"
+                  sizes="(max-width: 640px) 80px, 96px"
+                />
+              </div>
+              <p className="text-xs sm:text-sm font-medium uppercase tracking-[0.25em] text-brand-muted">
+                Isle of Man · Social dance
+              </p>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl leading-[1.1] text-balance text-white drop-shadow-lg">
+                Dance weekends & social events in the Isle of Man
+              </h1>
+              <p className="text-base sm:text-lg text-cream/85 font-light leading-relaxed">
+                Modern Jive, Tango and social dance in beautiful venues — bringing together local
+                dancers and visitors from across the UK & Ireland.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-end items-stretch sm:items-center pt-2">
+                <CtaLink href="/events">View events</CtaLink>
+                <CtaLink href="/travel" variant="secondary">
+                  Travel information
+                </CtaLink>
+              </div>
             </div>
-            <p className="text-xs sm:text-sm font-medium uppercase tracking-[0.25em] text-brand">
-              Isle of Man · Social dance
-            </p>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[3.25rem] leading-[1.1] text-balance text-ink">
-              Dance weekends and social dance events in the Isle of Man
-            </h1>
-            <p className="text-lg sm:text-xl text-ink-muted font-light leading-relaxed max-w-2xl mx-auto text-pretty">
-              Modern Jive, Tango and social dance in beautiful venues — bringing together local
-              dancers and visitors from across the UK and Ireland.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch sm:items-center pt-4">
-              <CtaLink href="/events">View events</CtaLink>
-              <CtaLink href="/travel" variant="secondary">
-                Travel information
-              </CtaLink>
-            </div>
-          </div>
-
-          {/* Photo placeholder — replace with <Image /> when you have assets */}
-          <div className="mx-auto mt-16 max-w-4xl photo-placeholder aspect-[21/9] sm:aspect-[2.4/1] flex flex-col items-center justify-center gap-2 px-6 text-center">
-            <span className="text-xs font-medium uppercase tracking-widest text-brand/50">
-              Photography
-            </span>
-            <p className="text-sm text-ink-muted/80 max-w-sm font-light italic">
-              Venue and event photos will sit here — for now, enjoy the calm of an empty dance floor
-              before the music starts.
-            </p>
           </div>
         </div>
       </section>
